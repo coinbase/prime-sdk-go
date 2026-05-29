@@ -17,7 +17,7 @@
 package utils
 
 import (
-	"github.com/coinbase-samples/prime-sdk-go/model"
+	"github.com/coinbase/prime-sdk-go/model"
 	"github.com/shopspring/decimal"
 )
 

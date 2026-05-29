@@ -22,9 +22,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/coinbase-samples/prime-sdk-go/client"
-	"github.com/coinbase-samples/prime-sdk-go/credentials"
-	"github.com/coinbase-samples/prime-sdk-go/wallets"
+	"github.com/coinbase/prime-sdk-go/client"
+	"github.com/coinbase/prime-sdk-go/credentials"
+	"github.com/coinbase/prime-sdk-go/wallets"
 )
 
 func main() {

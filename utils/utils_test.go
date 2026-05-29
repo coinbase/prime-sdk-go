@@ -19,7 +19,7 @@ package utils
 import (
 	"testing"
 
-	"github.com/coinbase-samples/prime-sdk-go/model"
+	"github.com/coinbase/prime-sdk-go/model"
 )
 
 func TestPaginationParams(t *testing.T) {

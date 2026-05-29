@@ -23,9 +23,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/coinbase-samples/prime-sdk-go/model"
-	"github.com/coinbase-samples/prime-sdk-go/utils"
-	"github.com/coinbase-samples/prime-sdk-go/wallets"
+	"github.com/coinbase/prime-sdk-go/model"
+	"github.com/coinbase/prime-sdk-go/utils"
+	"github.com/coinbase/prime-sdk-go/wallets"
 )
 
 func TestCreateWallet(t *testing.T) {

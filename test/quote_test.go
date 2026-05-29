@@ -22,8 +22,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/coinbase-samples/prime-sdk-go/orders"
-	"github.com/coinbase-samples/prime-sdk-go/utils"
+	"github.com/coinbase/prime-sdk-go/orders"
+	"github.com/coinbase/prime-sdk-go/utils"
 )
 
 func TestQuote(t *testing.T) {

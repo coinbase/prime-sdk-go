@@ -20,8 +20,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/coinbase-samples/core-go"
-	"github.com/coinbase-samples/prime-sdk-go/client"
+	"github.com/coinbase/core-go"
+	"github.com/coinbase/prime-sdk-go/client"
 )
 
 type CreateConversionRequest struct {

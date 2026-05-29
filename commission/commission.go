@@ -19,7 +19,7 @@ package commission
 import (
 	"context"
 
-	"github.com/coinbase-samples/prime-sdk-go/client"
+	"github.com/coinbase/prime-sdk-go/client"
 )
 
 type CommissionService interface {

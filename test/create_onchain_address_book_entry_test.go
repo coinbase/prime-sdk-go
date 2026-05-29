@@ -23,8 +23,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/coinbase-samples/prime-sdk-go/model"
-	"github.com/coinbase-samples/prime-sdk-go/onchainaddressbook"
+	"github.com/coinbase/prime-sdk-go/model"
+	"github.com/coinbase/prime-sdk-go/onchainaddressbook"
 )
 
 func TestCreateOnchainAddressBookEntry(t *testing.T) {

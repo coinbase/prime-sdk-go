@@ -1,7 +1,7 @@
 # Prime Go SDK README
 
-[![GoDoc](https://godoc.org/github.com/coinbase-samples/prime-sdk-go?status.svg)](https://godoc.org/github.com/coinbase-samples/prime-sdk-go)
-[![Go Report Card](https://goreportcard.com/badge/coinbase-samples/prime-sdk-go)](https://goreportcard.com/report/coinbase-samples/prime-sdk-go)
+[![GoDoc](https://godoc.org/github.com/coinbase/prime-sdk-go?status.svg)](https://godoc.org/github.com/coinbase/prime-sdk-go)
+[![Go Report Card](https://goreportcard.com/badge/coinbase/prime-sdk-go)](https://goreportcard.com/report/coinbase/prime-sdk-go)
 
 ## Overview
 
@@ -65,7 +65,7 @@ If you discover a security vulnerability within this SDK, please see our [Securi
 
 ## 📧 Contact
 
-- [GitHub Issues](https://github.com/coinbase-samples/prime-sdk-go/issues)
+- [GitHub Issues](https://github.com/coinbase/prime-sdk-go/issues)
 
 ## License
 

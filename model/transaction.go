@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/coinbase-samples/core-go"
+	"github.com/coinbase/core-go"
 	"github.com/shopspring/decimal"
 )
 

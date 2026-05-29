@@ -19,7 +19,7 @@ package model
 import (
 	"fmt"
 
-	"github.com/coinbase-samples/core-go"
+	"github.com/coinbase/core-go"
 	"github.com/shopspring/decimal"
 )
 

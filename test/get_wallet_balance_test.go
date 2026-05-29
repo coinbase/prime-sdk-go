@@ -21,9 +21,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/coinbase-samples/prime-sdk-go/balances"
-	"github.com/coinbase-samples/prime-sdk-go/model"
-	"github.com/coinbase-samples/prime-sdk-go/wallets"
+	"github.com/coinbase/prime-sdk-go/balances"
+	"github.com/coinbase/prime-sdk-go/model"
+	"github.com/coinbase/prime-sdk-go/wallets"
 )
 
 func TestGetWalletBalance(t *testing.T) {

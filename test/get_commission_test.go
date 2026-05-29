@@ -21,7 +21,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/coinbase-samples/prime-sdk-go/commission"
+	"github.com/coinbase/prime-sdk-go/commission"
 )
 
 func TestPortfolioCommission(t *testing.T) {

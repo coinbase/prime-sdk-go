@@ -19,8 +19,8 @@ package transactions
 import (
 	"context"
 
-	"github.com/coinbase-samples/prime-sdk-go/client"
-	"github.com/coinbase-samples/prime-sdk-go/model"
+	"github.com/coinbase/prime-sdk-go/client"
+	"github.com/coinbase/prime-sdk-go/model"
 )
 
 type TransactionsService interface {

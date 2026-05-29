@@ -1,9 +1,9 @@
-module github.com/coinbase-samples/prime-sdk-go
+module github.com/coinbase/prime-sdk-go
 
 go 1.25.0
 
 require (
-	github.com/coinbase-samples/core-go v0.2.2
+	github.com/coinbase/core-go v0.3.0
 	github.com/google/uuid v1.6.0
 	github.com/shopspring/decimal v1.4.0
 )

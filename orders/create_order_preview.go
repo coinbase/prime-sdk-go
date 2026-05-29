@@ -21,9 +21,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/coinbase-samples/core-go"
-	"github.com/coinbase-samples/prime-sdk-go/client"
-	"github.com/coinbase-samples/prime-sdk-go/model"
+	"github.com/coinbase/core-go"
+	"github.com/coinbase/prime-sdk-go/client"
+	"github.com/coinbase/prime-sdk-go/model"
 )
 
 type CreateOrderPreviewResponse struct {

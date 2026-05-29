@@ -21,8 +21,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/coinbase-samples/prime-sdk-go/balances"
-	"github.com/coinbase-samples/prime-sdk-go/model"
+	"github.com/coinbase/prime-sdk-go/balances"
+	"github.com/coinbase/prime-sdk-go/model"
 )
 
 func TestListPortfolioBalances(t *testing.T) {

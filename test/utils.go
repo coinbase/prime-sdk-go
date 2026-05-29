@@ -23,9 +23,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/coinbase-samples/prime-sdk-go/client"
-	"github.com/coinbase-samples/prime-sdk-go/credentials"
-	"github.com/coinbase-samples/prime-sdk-go/portfolios"
+	"github.com/coinbase/prime-sdk-go/client"
+	"github.com/coinbase/prime-sdk-go/credentials"
+	"github.com/coinbase/prime-sdk-go/portfolios"
 )
 
 func loadEntityId(c client.RestClient) (string, error) {

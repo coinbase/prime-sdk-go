@@ -21,7 +21,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/coinbase-samples/prime-sdk-go/onchainaddressbook"
+	"github.com/coinbase/prime-sdk-go/onchainaddressbook"
 )
 
 func TestListOnchainAddressGroups(t *testing.T) {

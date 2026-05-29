@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/coinbase-samples/core-go"
-	"github.com/coinbase-samples/prime-sdk-go/model"
+	"github.com/coinbase/core-go"
+	"github.com/coinbase/prime-sdk-go/model"
 )
 
 func TimeToStr(t time.Time) string {

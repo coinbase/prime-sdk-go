@@ -21,7 +21,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/coinbase-samples/prime-sdk-go/addressbook"
+	"github.com/coinbase/prime-sdk-go/addressbook"
 )
 
 func TestGetAddressBook(t *testing.T) {

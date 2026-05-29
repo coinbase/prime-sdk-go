@@ -27,8 +27,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/coinbase-samples/core-go"
-	"github.com/coinbase-samples/prime-sdk-go/credentials"
+	"github.com/coinbase/core-go"
+	"github.com/coinbase/prime-sdk-go/credentials"
 )
 
 const defaultV1ApiBaseUrl = "https://api.prime.coinbase.com/v1"

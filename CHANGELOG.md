@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0] - 2026-05-29
+
+### Changed
+
+- Relocated module from `github.com/coinbase-samples/prime-sdk-go` to `github.com/coinbase/prime-sdk-go`.
+- Depends on `github.com/coinbase/core-go` v0.3.0 (replacing `github.com/coinbase-samples/core-go`).
+- No intentional API changes; equivalent to v0.7.0 on the previous module path.
 
 ## [0.7.0] - 2026-MAY-11
 

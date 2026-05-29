@@ -34,7 +34,7 @@ type Commission struct {
 func (p Commission) RateNum() (rate decimal.Decimal, err error) {
 	rate, err = core.StrToNum(p.Rate)
 	if err != nil {
-		err = fmt.Errorf("Invalid commission rate: %s - err: %w", p.Rate, err)
+		err = fmt.Errorf("invalid commission rate: %s - err: %w", p.Rate, err)
 	}
 	return
 }

@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.8.1] - 2026-05-29
+
+### Fixed
+
+- `User-Agent` header now reports the correct SDK version via `sdkVersion` (was incorrectly `0.7.0` after the v0.8.0 module release).
+
 ## [0.8.0] - 2026-05-29
 
 ### Changed

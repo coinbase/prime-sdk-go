@@ -16,7 +16,13 @@
 
 package client
 
-import "testing"
+import (
+	"net/http"
+	"testing"
+	"time"
+
+	"github.com/coinbase/prime-sdk-go/credentials"
+)
 
 func TestVersionedBaseUrl(t *testing.T) {
 	cases := []struct {
@@ -36,5 +42,25 @@ func TestVersionedBaseUrl(t *testing.T) {
 		if got != tc.want {
 			t.Errorf("VersionedBaseUrl(%q, %q) = %q; want %q", tc.base, tc.version, got, tc.want)
 		}
+	}
+}
+
+func TestAddPrimeHeadersUserAgent(t *testing.T) {
+	req, err := http.NewRequest(http.MethodGet, "https://api.prime.coinbase.com/v1/portfolios", nil)
+	if err != nil {
+		t.Fatalf("http.NewRequest: %v", err)
+	}
+
+	cl := NewRestClient(&credentials.Credentials{
+		AccessKey:  "test-key",
+		Passphrase: "test-pass",
+		SigningKey: "test-signing-key",
+	}, http.Client{})
+
+	AddPrimeHeaders(req, "/v1/portfolios", nil, cl, time.Unix(0, 0))
+
+	want := "prime-sdk-go/" + sdkVersion
+	if got := req.Header.Get("User-Agent"); got != want {
+		t.Errorf("User-Agent = %q; want %q", got, want)
 	}
 }

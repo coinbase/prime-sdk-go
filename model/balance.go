@@ -46,7 +46,7 @@ type Balance struct {
 func (b Balance) AmountNum() (amount decimal.Decimal, err error) {
 	amount, err = core.StrToNum(b.Amount)
 	if err != nil {
-		err = fmt.Errorf("Invalid asset amount: %s - symbol: %s - msg: %v", b.Amount, b.Symbol, err)
+		err = fmt.Errorf("invalid asset amount: %s - symbol: %s - msg: %v", b.Amount, b.Symbol, err)
 	}
 	return
 }
@@ -54,7 +54,7 @@ func (b Balance) AmountNum() (amount decimal.Decimal, err error) {
 func (b Balance) HoldsNum() (holds decimal.Decimal, err error) {
 	holds, err = core.StrToNum(b.Holds)
 	if err != nil {
-		err = fmt.Errorf("Invalid asset holds: %s - symbol: %s - msg: %v", b.Holds, b.Symbol, err)
+		err = fmt.Errorf("invalid asset holds: %s - symbol: %s - msg: %v", b.Holds, b.Symbol, err)
 	}
 	return
 }

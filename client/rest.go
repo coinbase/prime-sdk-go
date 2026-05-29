@@ -145,6 +145,7 @@ func AddPrimeHeaders(req *http.Request, path string, body []byte, cl core.RestCl
 
 func sign(method, path, timestamp, signingKey, body string) string {
 	h := hmac.New(sha256.New, []byte(signingKey))
-	h.Write([]byte(fmt.Sprintf("%s%s%s%s", timestamp, method, path, body)))
+	// hash.Hash.Write does not fail for hmac; err is only non-nil for exotic io.Writer implementations.
+	_, _ = fmt.Fprintf(h, "%s%s%s%s", timestamp, method, path, body)
 	return base64.StdEncoding.EncodeToString(h.Sum(nil))
 }

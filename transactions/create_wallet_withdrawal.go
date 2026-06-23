@@ -34,24 +34,36 @@ type CreateWalletWithdrawalRequest struct {
 	Symbol            string                               `json:"currency_symbol"`
 	PaymentMethod     *CreateWalletWithdrawalPaymentMethod `json:"payment_method"`
 	BlockchainAddress *model.BlockchainAddress             `json:"blockchain_address"`
+	Counterparty      *model.CounterpartyDestination       `json:"counterparty,omitempty"`
+	TravelRuleData    *WithdrawalTravelRuleData            `json:"travel_rule_data,omitempty"`
 }
 
 type CreateWalletWithdrawalPaymentMethod struct {
 	Id string `json:"payment_method_id"`
 }
 
+type WithdrawalTravelRuleData struct {
+	Originator                    *model.TravelRuleParty `json:"originator,omitempty"`
+	Beneficiary                   *model.TravelRuleParty `json:"beneficiary,omitempty"`
+	IsSelf                        bool                   `json:"is_self,omitempty"`
+	IsIntermediary                bool                   `json:"is_intermediary,omitempty"`
+	OptOutOfOwnershipVerification bool                   `json:"opt_out_of_ownership_verification,omitempty"`
+	AttestVerifiedWalletOwnership bool                   `json:"attest_verified_wallet_ownership,omitempty"`
+}
+
 type CreateWalletWithdrawalResponse struct {
-	ActivityId      string                         `json:"activity_id"`
-	ApprovalUrl     string                         `json:"approval_url"`
-	Symbol          string                         `json:"symbol"`
-	Amount          string                         `json:"amount"`
-	Fee             string                         `json:"fee"`
-	DestinationType string                         `json:"destination_type"`
-	SourceType      string                         `json:"source_type"`
-	Destination     *model.BlockchainAddress       `json:"blockchain_destination"`
-	Source          *model.BlockchainAddress       `json:"blockchain_source"`
-	TransactionId   string                         `json:"transaction_id"`
-	Request         *CreateWalletWithdrawalRequest `json:"-"`
+	ActivityId               string                         `json:"activity_id"`
+	ApprovalUrl              string                         `json:"approval_url"`
+	Symbol                   string                         `json:"symbol"`
+	Amount                   string                         `json:"amount"`
+	Fee                      string                         `json:"fee"`
+	DestinationType          string                         `json:"destination_type"`
+	SourceType               string                         `json:"source_type"`
+	Destination              *model.BlockchainAddress       `json:"blockchain_destination"`
+	CounterpartyDestination  *model.CounterpartyDestination `json:"counterparty_destination"`
+	Source                   *model.BlockchainAddress       `json:"blockchain_source"`
+	TransactionId            string                         `json:"transaction_id"`
+	Request                  *CreateWalletWithdrawalRequest `json:"-"`
 }
 
 func (s *transactionsServiceImpl) CreateWalletWithdrawal(

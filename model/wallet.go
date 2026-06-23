@@ -61,6 +61,11 @@ type BlockchainAddress struct {
 	Network           *NetworkDetails `json:"network"`
 }
 
+// CounterpartyDestination represents a destination for a counterparty payment
+type CounterpartyDestination struct {
+	CounterpartyId string `json:"counterparty_id,omitempty"`
+}
+
 // CryptoDepositInstructions represents instructions for crypto deposits
 type CryptoDepositInstructions struct {
 	Id                string `json:"id"`

@@ -68,6 +68,8 @@ type TravelRuleParty struct {
 	VaspName          string               `json:"vasp_name,omitempty"`
 	PersonalId        string               `json:"personal_id,omitempty"`
 	DateOfBirth       *TravelRuleDate      `json:"date_of_birth,omitempty"`
+	TelephoneNumber   string               `json:"telephone_number,omitempty"`
+	AccountId         string               `json:"account_id,omitempty"`
 }
 
 // EstimatedNetworkFees represents estimated network fees for a transaction

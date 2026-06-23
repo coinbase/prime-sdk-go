@@ -36,6 +36,8 @@ type EditOrderRequest struct {
 	LimitPrice        string `json:"limit_price,omitempty"`        // Limit price (required for TWAP, VWAP, LIMIT, STOP_LIMIT)
 	ExpiryTime        string `json:"expiry_time,omitempty"`        // Expiry time in UTC (TWAP, VWAP, LIMIT, STOP_LIMIT GTD only)
 	DisplayQuoteSize  string `json:"display_quote_size,omitempty"` // Display quote size for iceberg orders
+	Offset            string `json:"offset,omitempty"`             // Peg offset for PEG orders
+	WigLevel          string `json:"wig_level,omitempty"`          // WIG level for PEG orders
 }
 
 // EditOrderResponse represents the response from editing an order

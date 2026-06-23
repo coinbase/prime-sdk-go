@@ -28,9 +28,10 @@ import (
 type PortfolioUnstakeRequest struct {
 	PortfolioId    string                          `json:"portfolio_id"`
 	IdempotencyKey string                          `json:"idempotency_key"`
-	CurrencySymbol string                          `json:"currency_symbol"`
-	Amount         string                          `json:"amount"`
-	Metadata       *model.PortfolioStakingMetadata `json:"metadata,omitempty"`
+	CurrencySymbol    string                          `json:"currency_symbol"`
+	Amount            string                          `json:"amount,omitempty"`
+	Metadata          *model.PortfolioStakingMetadata `json:"metadata,omitempty"`
+	ValidatorProvider model.ValidatorProvider         `json:"validator_provider,omitempty"`
 }
 
 type PortfolioUnstakeResponse struct {

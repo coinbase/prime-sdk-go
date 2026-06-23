@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.9.0] - 2026-JUN-23
+
+### Changed
+
+- **Breaking:** Renamed `SetFundingSettings` to `UpdateFundingSettings` (GA graduation from beta)
+- **Breaking:** Fixed `UpdateFundingSettings` path from `/entities/{id}/funding/settings` to `/entities/{id}/funding_settings`
+- `GetCrossMarginPrimeOverview` operationId updated to GA (`PrimeRESTAPI_GetCrossMarginPrimeOverview`)
+
+### Added
+
+#### New & Updated Models
+
+- **`WalletStakingMetadata`**: Optional metadata for wallet stake/unstake requests (`external_id`)
+- **`ValidatorProvider`**: ETH validator service provider enum for portfolio unstaking
+- **`CustomStablecoinAsset`**, **`CustomStablecoinRewardDetails`**: Custom stablecoin reward payout details
+- **`RewardSubtype`**: Added `TRANSACTION_REWARD`, `STAKING_FEE_REBATE_REWARD`, `BUIDL_DIVIDEND`, `CUSTOM_STABLECOIN_REWARD`
+- **`RewardMetadata`**: Added `custom_stablecoin_reward_details` field
+- **`TravelRuleData`**, **`CounterpartyDestination`**: Travel rule and counterparty destination types for withdrawals
+
+#### Updated Request/Response Fields
+
+- **`EditOrderRequest`**: Added `offset`, `wig_level` (PEG order fields)
+- **`CreateStakeRequest`**, **`CreateUnstakeRequest`**: Added optional `metadata` (`WalletStakingMetadata`)
+- **`PortfolioUnstakeRequest`**: Added `validator_provider`; `amount` is now optional
+- **`CreateWalletWithdrawalRequest`**: Added `counterparty`, `travel_rule_data`
+- **`CreateWalletWithdrawalResponse`**: Added `counterparty_destination`
+
 ## [0.8.1] - 2026-05-29
 
 ### Fixed

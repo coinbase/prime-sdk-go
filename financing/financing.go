@@ -34,7 +34,7 @@ type FinancingService interface {
 	GetCrossMarginOverview(ctx context.Context, request *GetCrossMarginOverviewRequest) (*GetCrossMarginOverviewResponse, error)
 	GetCrossMarginRiskParameters(ctx context.Context, request *GetCrossMarginRiskParametersRequest) (*GetCrossMarginRiskParametersResponse, error)
 	GetCrossMarginPrimeOverview(ctx context.Context, request *GetCrossMarginPrimeOverviewRequest) (*GetCrossMarginPrimeOverviewResponse, error)
-	SetFundingSettings(ctx context.Context, request *SetFundingSettingsRequest) (*SetFundingSettingsResponse, error)
+	UpdateFundingSettings(ctx context.Context, request *UpdateFundingSettingsRequest) (*UpdateFundingSettingsResponse, error)
 	GetMarketData(ctx context.Context, request *GetMarketDataRequest) (*GetMarketDataResponse, error)
 	ListLocates(ctx context.Context, request *ListLocatesRequest) (*ListLocatesResponse, error)
 	ListInterestAccruals(ctx context.Context, request *ListInterestAccrualsRequest) (*ListInterestAccrualsResponse, error)

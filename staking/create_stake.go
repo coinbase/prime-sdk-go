@@ -22,6 +22,7 @@ import (
 
 	"github.com/coinbase/core-go"
 	"github.com/coinbase/prime-sdk-go/client"
+	"github.com/coinbase/prime-sdk-go/model"
 )
 
 type CreateStakeInputs struct {
@@ -35,8 +36,9 @@ type CreateStakeRequest struct {
 	// required
 	WalletId string `json:"wallet_id"`
 	// The client generated idempotency key for requested execution. Subsequent requests using the same key will fail
-	IdempotencyKey string            `json:"idempotency_key"`
-	Inputs         CreateStakeInputs `json:"inputs,omitempty"`
+	IdempotencyKey string                    `json:"idempotency_key"`
+	Inputs         CreateStakeInputs         `json:"inputs,omitempty"`
+	Metadata       *model.WalletStakingMetadata `json:"metadata,omitempty"`
 }
 
 type CreateStakeResponse struct {

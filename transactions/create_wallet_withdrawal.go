@@ -34,6 +34,8 @@ type CreateWalletWithdrawalRequest struct {
 	Symbol            string                               `json:"currency_symbol"`
 	PaymentMethod     *CreateWalletWithdrawalPaymentMethod `json:"payment_method"`
 	BlockchainAddress *model.BlockchainAddress             `json:"blockchain_address"`
+	Counterparty      *model.CounterpartyDestination       `json:"counterparty,omitempty"`
+	TravelRuleData    *model.TravelRuleData                `json:"travel_rule_data,omitempty"`
 }
 
 type CreateWalletWithdrawalPaymentMethod struct {
@@ -48,9 +50,10 @@ type CreateWalletWithdrawalResponse struct {
 	Fee             string                         `json:"fee"`
 	DestinationType string                         `json:"destination_type"`
 	SourceType      string                         `json:"source_type"`
-	Destination     *model.BlockchainAddress       `json:"blockchain_destination"`
-	Source          *model.BlockchainAddress       `json:"blockchain_source"`
-	TransactionId   string                         `json:"transaction_id"`
+	Destination             *model.BlockchainAddress       `json:"blockchain_destination"`
+	Source                  *model.BlockchainAddress       `json:"blockchain_source"`
+	CounterpartyDestination *model.CounterpartyDestination `json:"counterparty_destination,omitempty"`
+	TransactionId           string                         `json:"transaction_id"`
 	Request         *CreateWalletWithdrawalRequest `json:"-"`
 }
 

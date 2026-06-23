@@ -38,8 +38,9 @@ type CreateUnstakeRequest struct {
 	// required
 	WalletId string `json:"wallet_id"`
 	// The client generated idempotency key for requested execution. Subsequent requests using the same key will fail
-	IdempotencyKey string              `json:"idempotency_key"`
-	Inputs         CreateUnstakeInputs `json:"inputs,omitempty"`
+	IdempotencyKey string                       `json:"idempotency_key"`
+	Inputs         CreateUnstakeInputs          `json:"inputs,omitempty"`
+	Metadata       *model.WalletStakingMetadata `json:"metadata,omitempty"`
 }
 
 type CreateUnstakeResponse struct {

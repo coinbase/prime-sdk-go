@@ -58,6 +58,21 @@ type TravelRuleDate struct {
 	Day   int32 `json:"day,omitempty"`
 }
 
+// TravelRuleData contains travel rule information for withdrawals.
+type TravelRuleData struct {
+	Beneficiary                   *TravelRuleParty `json:"beneficiary,omitempty"`
+	Originator                    *TravelRuleParty `json:"originator,omitempty"`
+	IsSelf                        bool             `json:"is_self,omitempty"`
+	IsIntermediary                bool             `json:"is_intermediary,omitempty"`
+	OptOutOfOwnershipVerification bool             `json:"opt_out_of_ownership_verification,omitempty"`
+	AttestVerifiedWalletOwnership bool             `json:"attest_verified_wallet_ownership,omitempty"`
+}
+
+// CounterpartyDestination represents a destination for a counterparty payment.
+type CounterpartyDestination struct {
+	CounterpartyId string `json:"counterparty_id,omitempty"`
+}
+
 // TravelRuleParty represents a party in a travel rule transaction
 type TravelRuleParty struct {
 	Name              string               `json:"name,omitempty"`
@@ -86,15 +101,32 @@ type MatchMetadata struct {
 type RewardSubtype string
 
 const (
-	RewardSubtypeUnknown   RewardSubtype = "REWARD_SUBTYPE_UNKNOWN"
-	RewardSubtypeMEV       RewardSubtype = "MEV_REWARD"
-	RewardSubtypeInflation RewardSubtype = "INFLATION_REWARD"
-	RewardSubtypeBlock     RewardSubtype = "BLOCK_REWARD"
+	RewardSubtypeUnknown              RewardSubtype = "REWARD_SUBTYPE_UNKNOWN"
+	RewardSubtypeMEV                  RewardSubtype = "MEV_REWARD"
+	RewardSubtypeInflation            RewardSubtype = "INFLATION_REWARD"
+	RewardSubtypeBlock                RewardSubtype = "BLOCK_REWARD"
+	RewardSubtypeTransaction          RewardSubtype = "TRANSACTION_REWARD"
+	RewardSubtypeStakingFeeRebate     RewardSubtype = "STAKING_FEE_REBATE_REWARD"
+	RewardSubtypeBuidlDividend        RewardSubtype = "BUIDL_DIVIDEND"
+	RewardSubtypeCustomStablecoin     RewardSubtype = "CUSTOM_STABLECOIN_REWARD"
 )
+
+// CustomStablecoinAsset contains currency metadata for a custom stablecoin reward program.
+type CustomStablecoinAsset struct {
+	Symbol string `json:"symbol,omitempty"`
+}
+
+// CustomStablecoinRewardDetails contains details for a custom stablecoin reward payout.
+type CustomStablecoinRewardDetails struct {
+	StartDate string                 `json:"start_date,omitempty"`
+	EndDate   string                 `json:"end_date,omitempty"`
+	Asset     *CustomStablecoinAsset `json:"asset,omitempty"`
+}
 
 // RewardMetadata represents metadata for reward transactions
 type RewardMetadata struct {
-	Subtype RewardSubtype `json:"subtype,omitempty"`
+	Subtype                       RewardSubtype                  `json:"subtype,omitempty"`
+	CustomStablecoinRewardDetails *CustomStablecoinRewardDetails `json:"custom_stablecoin_reward_details,omitempty"`
 }
 
 // Web3TransactionMetadata represents metadata for web3 transactions

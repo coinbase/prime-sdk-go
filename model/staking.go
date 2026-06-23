@@ -135,6 +135,24 @@ type PortfolioStakingMetadata struct {
 	ExternalId string `json:"external_id,omitempty"`
 }
 
+// WalletStakingMetadata contains optional metadata for wallet staking requests.
+type WalletStakingMetadata struct {
+	ExternalId string `json:"external_id,omitempty"`
+}
+
+// ValidatorProvider enumerates the ETH validator service providers accepted for unstaking.
+type ValidatorProvider string
+
+const (
+	ValidatorProviderUnspecified   ValidatorProvider = "VALIDATOR_PROVIDER_UNSPECIFIED"
+	ValidatorProviderCoinbaseCloud ValidatorProvider = "VALIDATOR_PROVIDER_COINBASE_CLOUD"
+	ValidatorProviderMavan        ValidatorProvider = "VALIDATOR_PROVIDER_MAVAN"
+	ValidatorProviderFigment      ValidatorProvider = "VALIDATOR_PROVIDER_FIGMENT"
+	ValidatorProviderCodefi       ValidatorProvider = "VALIDATOR_PROVIDER_CODEFI"
+	ValidatorProviderAttestant    ValidatorProvider = "VALIDATOR_PROVIDER_ATTESTANT"
+	ValidatorProviderGalaxy       ValidatorProvider = "VALIDATOR_PROVIDER_GALAXY"
+)
+
 // ValidatorUnstakePreview contains the per-validator breakdown for an unstake preview.
 type ValidatorUnstakePreview struct {
 	ValidatorAddress           string  `json:"validator_address,omitempty"`

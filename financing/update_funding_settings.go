@@ -24,7 +24,7 @@ import (
 	"github.com/coinbase/prime-sdk-go/client"
 )
 
-type SetFundingSettingsRequest struct {
+type UpdateFundingSettingsRequest struct {
 	EntityId string `json:"entity_id"`
 	// DesignatedFundingPortfolioId is the Derivatives Funding Portfolio used to fund
 	// FCM margin calls and receive excess margin sweeps.
@@ -43,21 +43,21 @@ type SetFundingSettingsRequest struct {
 	ExcessFundsTargetAmount string `json:"excess_funds_target_amount"`
 }
 
-type SetFundingSettingsResponse struct {
-	ActivityId            string                     `json:"activity_id"`
-	ActivityType          string                     `json:"activity_type"`
-	NumApprovalsRemaining int32                      `json:"num_approvals_remaining"`
-	Request               *SetFundingSettingsRequest `json:"-"`
+type UpdateFundingSettingsResponse struct {
+	ActivityId            string                        `json:"activity_id"`
+	ActivityType          string                        `json:"activity_type"`
+	NumApprovalsRemaining int32                         `json:"num_approvals_remaining"`
+	Request               *UpdateFundingSettingsRequest `json:"-"`
 }
 
-func (s *financingServiceImpl) SetFundingSettings(
+func (s *financingServiceImpl) UpdateFundingSettings(
 	ctx context.Context,
-	request *SetFundingSettingsRequest,
-) (*SetFundingSettingsResponse, error) {
+	request *UpdateFundingSettingsRequest,
+) (*UpdateFundingSettingsResponse, error) {
 
-	path := fmt.Sprintf("/entities/%s/funding/settings", request.EntityId)
+	path := fmt.Sprintf("/entities/%s/funding_settings", request.EntityId)
 
-	response := &SetFundingSettingsResponse{Request: request}
+	response := &UpdateFundingSettingsResponse{Request: request}
 
 	if err := core.HttpPost(
 		ctx,

@@ -81,6 +81,7 @@ type TravelRuleParty struct {
 	WalletType        TravelRuleWalletType `json:"wallet_type,omitempty"`
 	VaspId            string               `json:"vasp_id,omitempty"`
 	VaspName          string               `json:"vasp_name,omitempty"`
+	VaspAddress       *DetailedAddress     `json:"vasp_address,omitempty"`
 	PersonalId        string               `json:"personal_id,omitempty"`
 	DateOfBirth       *TravelRuleDate      `json:"date_of_birth,omitempty"`
 }

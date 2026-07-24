@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.1] - 2026-JUL-24
+
+### Added
+
+#### Updated Request/Response Fields
+
+- **`TravelRuleParty`**: Added `vasp_address` field
+
 ## [0.9.0] - 2026-JUN-23
 
 ### Changed

@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.9.2] - 2026-AUG-5
+
+### Added
+
+- **`Order`**: Added `is_buy_exact` field
+
 ## [0.9.1] - 2026-JUL-24
 
 ### Added

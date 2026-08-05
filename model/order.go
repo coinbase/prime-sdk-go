@@ -84,6 +84,11 @@ type Order struct {
 	// so $2000 will then cost you 1 ETH + fee, requiring > 1 ETH
 	IsRaiseExact bool `json:"is_raise_exact,omitempty"`
 
+	// Buy Exact order flag. When true, fees for a BUY order sized in quote_value are charged on top of
+	// the requested quote_value instead of being carved out of it. Only valid for BUY orders sized in
+	// quote_value on SPOT products.
+	IsBuyExact bool `json:"is_buy_exact,omitempty"`
+
 	// Used for describe order, create order preview, and list portfolio orders
 	Id                    string `json:"id,omitempty"`
 	UserId                string `json:"user_id,omitempty"`
@@ -105,9 +110,9 @@ type Order struct {
 	ClientProductId       string `json:"client_product_id,omitempty"`
 	PostOnly              bool   `json:"post_only,omitempty"`
 	// Deprecated: Use EditHistory instead
-	OrderEditHistory []*OrderEditHistory `json:"order_edit_history,omitempty"`
-	DisplaySize      string              `json:"display_size,omitempty"`
-	EditHistory      []*EditHistory      `json:"edit_history,omitempty"`
+	OrderEditHistory      []*OrderEditHistory    `json:"order_edit_history,omitempty"`
+	DisplaySize           string                 `json:"display_size,omitempty"`
+	EditHistory           []*EditHistory         `json:"edit_history,omitempty"`
 	PegOffsetType         string                 `json:"peg_offset_type,omitempty"`
 	Offset                string                 `json:"offset,omitempty"`
 	WigLevel              string                 `json:"wig_level,omitempty"`

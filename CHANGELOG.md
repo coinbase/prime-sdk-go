@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.10.0] - 2026-AUG-28
+
+### Added
+
+#### New API Endpoints
+
+- **`GetConversionFees`**: Get organization stablecoin conversion fee tiers and month-to-date net conversion volume (`GET /conversion/fees`)
+- **`GetDerivativesCurrencySummary`**: Retrieve per-currency international derivatives balances for a portfolio (`GET /portfolios/{portfolio_id}/derivatives/currency_summary`)
+- **`GetDerivativePositions`**: Retrieve active derivative positions for a portfolio (`GET /portfolios/{portfolio_id}/derivatives/positions`)
+
+#### New & Updated Models
+
+- **`Product`**: `ProductType` now includes `OPTION`
+- **`ConversionFee`**: Per-pair conversion fee row with month-to-date volume and progressive tiers
+- **`ConversionFeeTier`**: A single tier in the progressive stablecoin conversion schedule
+- **`DerivativePosition`**: A derivative position across product types, including options details
+- **`DerivativesCurrencyBalance`**: Per-currency international derivatives balances
+- **`OptionsDetails`**: Options greeks and strike for a derivative position
+
+#### New Enums
+
+- **`ProductTypeOption`**
+- **`DerivativeProductType`**
+- **`OptionType`**
+- **`FcmPositionSide`**
+
 ## [0.9.2] - 2026-AUG-5
 
 ### Added

@@ -33,6 +33,8 @@ type FuturesService interface {
 	GetFcmRiskLimits(ctx context.Context, request *GetFcmRiskLimitsRequest) (*GetFcmRiskLimitsResponse, error)
 	GetFcmSettings(ctx context.Context, request *GetFcmSettingsRequest) (*GetFcmSettingsResponse, error)
 	SetFcmSettings(ctx context.Context, request *SetFcmSettingsRequest) (*SetFcmSettingsResponse, error)
+	GetDerivativesCurrencySummary(ctx context.Context, request *GetDerivativesCurrencySummaryRequest) (*GetDerivativesCurrencySummaryResponse, error)
+	GetDerivativePositions(ctx context.Context, request *GetDerivativePositionsRequest) (*GetDerivativePositionsResponse, error)
 }
 
 func NewFuturesService(c client.RestClient) FuturesService {

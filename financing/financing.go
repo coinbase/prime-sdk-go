@@ -42,6 +42,7 @@ type FinancingService interface {
 	ListMarginCallSummaries(ctx context.Context, request *ListMarginCallSummariesRequest) (*ListMarginCallSummariesResponse, error)
 	ListMarginConversions(ctx context.Context, request *ListMarginConversionsRequest) (*ListMarginConversionsResponse, error)
 	ListFinancingEligibleAssets(ctx context.Context, request *ListFinancingEligibleAssetsRequest) (*ListFinancingEligibleAssetsResponse, error)
+	GetConversionFees(ctx context.Context, request *GetConversionFeesRequest) (*GetConversionFeesResponse, error)
 	ServiceConfig() *model.ServiceConfig
 }
 

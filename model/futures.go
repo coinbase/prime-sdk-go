@@ -97,6 +97,80 @@ type FcmPosition struct {
 	ExpirationTime    string `json:"expiration_time"`
 }
 
+// FcmPositionSide represents the side of an FCM or derivative position.
+type FcmPositionSide string
+
+const (
+	FcmPositionSideLong  FcmPositionSide = "LONG"
+	FcmPositionSideShort FcmPositionSide = "SHORT"
+)
+
+// DerivativeProductType represents the general type of a derivative product.
+type DerivativeProductType string
+
+const (
+	DerivativeProductTypeUnspecified      DerivativeProductType = "DERIVATIVE_PRODUCT_TYPE_UNSPECIFIED"
+	DerivativeProductTypeSpot             DerivativeProductType = "DERIVATIVE_PRODUCT_TYPE_SPOT"
+	DerivativeProductTypeFuture           DerivativeProductType = "DERIVATIVE_PRODUCT_TYPE_FUTURE"
+	DerivativeProductTypeEquity           DerivativeProductType = "DERIVATIVE_PRODUCT_TYPE_EQUITY"
+	DerivativeProductTypePredictionMarket DerivativeProductType = "DERIVATIVE_PRODUCT_TYPE_PREDICTION_MARKET"
+	DerivativeProductTypeOption           DerivativeProductType = "DERIVATIVE_PRODUCT_TYPE_OPTION"
+	DerivativeProductTypeBasis            DerivativeProductType = "DERIVATIVE_PRODUCT_TYPE_BASIS"
+	DerivativeProductTypeEquityOption     DerivativeProductType = "DERIVATIVE_PRODUCT_TYPE_EQUITY_OPTION"
+	DerivativeProductTypeFutureCombo      DerivativeProductType = "DERIVATIVE_PRODUCT_TYPE_FUTURE_COMBO"
+	DerivativeProductTypeOptionCombo      DerivativeProductType = "DERIVATIVE_PRODUCT_TYPE_OPTION_COMBO"
+)
+
+// OptionType represents the type of an option position.
+type OptionType string
+
+const (
+	OptionTypeCall OptionType = "OPTION_TYPE_CALL"
+	OptionTypePut  OptionType = "OPTION_TYPE_PUT"
+)
+
+// OptionsDetails contains options-specific details for a derivative position, including greeks.
+type OptionsDetails struct {
+	Delta      string     `json:"delta,omitempty"`
+	Gamma      string     `json:"gamma,omitempty"`
+	Theta      string     `json:"theta,omitempty"`
+	Vega       string     `json:"vega,omitempty"`
+	Strike     string     `json:"strike,omitempty"`
+	OptionType OptionType `json:"option_type,omitempty"`
+}
+
+// DerivativePosition is a single derivative position across all derivative product types.
+type DerivativePosition struct {
+	ProductId         string                `json:"product_id,omitempty"`
+	Side              FcmPositionSide       `json:"side,omitempty"`
+	NumberOfContracts string                `json:"number_of_contracts,omitempty"`
+	DailyRealizedPnl  string                `json:"daily_realized_pnl,omitempty"`
+	UnrealizedPnl     string                `json:"unrealized_pnl,omitempty"`
+	CurrentPrice      string                `json:"current_price,omitempty"`
+	AvgEntryPrice     string                `json:"avg_entry_price,omitempty"`
+	ExpirationTime    string                `json:"expiration_time,omitempty"`
+	ProductType       DerivativeProductType `json:"product_type,omitempty"`
+	Currency          string                `json:"currency,omitempty"`
+	OptionsDetails    *OptionsDetails       `json:"options_details,omitempty"`
+	VenueId           string                `json:"venue_id,omitempty"`
+}
+
+// DerivativesCurrencyBalance contains balances for a single settlement currency
+// within an international derivatives portfolio.
+type DerivativesCurrencyBalance struct {
+	Currency          string               `json:"currency,omitempty"`
+	Balance           string               `json:"balance,omitempty"`
+	UnrealizedPnl     string               `json:"unrealized_pnl,omitempty"`
+	RealizedPnl       string               `json:"realized_pnl,omitempty"`
+	InitialMargin     string               `json:"initial_margin,omitempty"`
+	MaintenanceMargin string               `json:"maintenance_margin,omitempty"`
+	MarginBalance     string               `json:"margin_balance,omitempty"`
+	OptionValue       string               `json:"option_value,omitempty"`
+	MarginExcess      string               `json:"margin_excess,omitempty"`
+	MarginUtilization string               `json:"margin_utilization,omitempty"`
+	MarginHealthState FcmMarginHealthState `json:"margin_health_state,omitempty"`
+}
+
 // FcmSweep represents a futures sweep
 type FcmSweep struct {
 	Id              string           `json:"id"`

@@ -74,15 +74,24 @@ type FcmSettings struct {
 
 // FcmBalance represents FCM balance information for a portfolio
 type FcmBalance struct {
-	PortfolioId        string `json:"portfolio_id"`
-	CfmUsdBalance      string `json:"cfm_usd_balance"`
-	UnrealizedPnl      string `json:"unrealized_pnl"`
-	DailyRealizedPnl   string `json:"daily_realized_pnl"`
-	ExcessLiquidity    string `json:"excess_liquidity"`
-	FuturesBuyingPower string `json:"futures_buying_power"`
-	InitialMargin      string `json:"initial_margin"`
-	MaintenanceMargin  string `json:"maintenance_margin"`
-	ClearingAccountId  string `json:"clearing_account_id"`
+	PortfolioId                   string `json:"portfolio_id"`
+	CfmUsdBalance                 string `json:"cfm_usd_balance"`
+	UnrealizedPnl                 string `json:"unrealized_pnl"`
+	DailyRealizedPnl              string `json:"daily_realized_pnl"`
+	ExcessLiquidity               string `json:"excess_liquidity"`
+	FuturesBuyingPower            string `json:"futures_buying_power"`
+	InitialMargin                 string `json:"initial_margin"`
+	MaintenanceMargin             string `json:"maintenance_margin"`
+	ClearingAccountId             string `json:"clearing_account_id"`
+	CfmUnsettledAccruedFundingPnl string `json:"cfm_unsettled_accrued_funding_pnl,omitempty"`
+}
+
+// FcmEquity represents FCM equity data for an entity.
+type FcmEquity struct {
+	EodAccountEquity     string `json:"eod_account_equity,omitempty"`
+	EodUnrealizedPnl     string `json:"eod_unrealized_pnl,omitempty"`
+	CurrentExcessDeficit string `json:"current_excess_deficit,omitempty"`
+	AvailableToSweep     string `json:"available_to_sweep,omitempty"`
 }
 
 // FcmPosition represents a futures position

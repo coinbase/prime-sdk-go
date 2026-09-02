@@ -533,6 +533,32 @@ type TFAsset struct {
 	LiabilityAdjustment string `json:"liability_adjustment"`
 }
 
+// TFObligation is a trade finance obligation (loan) for an entity.
+type TFObligation struct {
+	PortfolioId    string `json:"portfolio_id,omitempty"`
+	Symbol         string `json:"symbol,omitempty"`
+	AmountDue      string `json:"amount_due,omitempty"`
+	NotionalAmount string `json:"notional_amount,omitempty"`
+	DueDate        string `json:"due_date,omitempty"`
+}
+
+// RewardsRateTierType describes what a rewards rate tier is scoped by.
+type RewardsRateTierType string
+
+const (
+	RewardsRateTierTypeBalance       RewardsRateTierType = "REWARDS_RATE_TIER_TYPE_BALANCE"
+	RewardsRateTierTypeOpenInterest  RewardsRateTierType = "REWARDS_RATE_TIER_TYPE_OPEN_INTEREST"
+	RewardsRateTierTypePercentVolume RewardsRateTierType = "REWARDS_RATE_TIER_TYPE_PERCENT_VOLUME"
+)
+
+// RewardsRateTier is a single tier in the rewards rate card.
+type RewardsRateTier struct {
+	Rate         string              `json:"rate,omitempty"`
+	LowerLimit   string              `json:"lower_limit,omitempty"`
+	UpperLimit   string              `json:"upper_limit,omitempty"`
+	CriteriaType RewardsRateTierType `json:"criteria_type,omitempty"`
+}
+
 // XMControlStatus represents the control status for Cross Margin trades and withdrawals
 type XMControlStatus string
 
@@ -646,6 +672,40 @@ type ActiveLiquidationSummary struct {
 	LiquidationId   string              `json:"liquidation_id"`
 	Status          XMLiquidationStatus `json:"status"`
 	ShortfallAmount string              `json:"shortfall_amount"`
+}
+
+// XMLiquidatedAsset provides per-asset detail for a liquidation.
+type XMLiquidatedAsset struct {
+	Asset              string `json:"asset,omitempty"`
+	LiquidatedAmount   string `json:"liquidated_amount,omitempty"`
+	LiquidatedNotional string `json:"liquidated_notional,omitempty"`
+	RemainingAmount    string `json:"remaining_amount,omitempty"`
+	RemainingNotional  string `json:"remaining_notional,omitempty"`
+}
+
+// XMLiquidationDetail provides detailed information about a single XM liquidation.
+type XMLiquidationDetail struct {
+	LiquidationId           string               `json:"liquidation_id,omitempty"`
+	Status                  XMLiquidationStatus  `json:"status,omitempty"`
+	ShortfallAmount         string               `json:"shortfall_amount,omitempty"`
+	PreLiquidationStartTime string               `json:"pre_liquidation_start_time,omitempty"`
+	MarginSummary           *XMSummary           `json:"margin_summary,omitempty"`
+	LiquidationStartTime    string               `json:"liquidation_start_time,omitempty"`
+	FilledAmount            string               `json:"filled_amount,omitempty"`
+	RemainingAmount         string               `json:"remaining_amount,omitempty"`
+	LiquidationFinishTime   string               `json:"liquidation_finish_time,omitempty"`
+	AssetBreakdown          []*XMLiquidatedAsset `json:"asset_breakdown,omitempty"`
+}
+
+// XMLiquidationSummary provides a summary of a single XM liquidation.
+type XMLiquidationSummary struct {
+	LiquidationId   string              `json:"liquidation_id,omitempty"`
+	Status          XMLiquidationStatus `json:"status,omitempty"`
+	ShortfallAmount string              `json:"shortfall_amount,omitempty"`
+	FilledAmount    string              `json:"filled_amount,omitempty"`
+	RemainingAmount string              `json:"remaining_amount,omitempty"`
+	CreatedAt       string              `json:"created_at,omitempty"`
+	CompletedAt     string              `json:"completed_at,omitempty"`
 }
 
 // CrossMarginOverview represents the Cross Margin overview for an entity

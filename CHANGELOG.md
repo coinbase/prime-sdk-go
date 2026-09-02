@@ -9,15 +9,28 @@
 - **`GetConversionFees`**: Get organization stablecoin conversion fee tiers and month-to-date net conversion volume (`GET /conversion/fees`)
 - **`GetDerivativesCurrencySummary`**: Retrieve per-currency international derivatives balances for a portfolio (`GET /portfolios/{portfolio_id}/derivatives/currency_summary`)
 - **`GetDerivativePositions`**: Retrieve active derivative positions for a portfolio (`GET /portfolios/{portfolio_id}/derivatives/positions`)
+- **`GetXMLiquidation`**: Get detailed cross-margin liquidation data for an entity (`GET /entities/{entity_id}/cross_margin/liquidation`)
+- **`ListXMLiquidations`**: List historical cross-margin liquidations for an entity (`GET /entities/{entity_id}/cross_margin/liquidations`)
+- **`ListTFObligations`**: List trade finance obligations for an entity (`GET /entities/{entity_id}/tf_obligations`)
+- **`GetFcmEquity`**: Retrieve FCM equity data for an entity (`GET /entities/{entity_id}/futures/equity`)
+- **`GetEntityRewardsRate`**: Get current rewards rate and available tiers for an entity (beta) (`GET /entities/{entity_id}/rewards/rate`)
+- **`GetPortfolioRewardsRate`**: Get current rewards rate and available tiers for a portfolio (beta) (`GET /portfolios/{portfolio_id}/rewards/rate`)
 
 #### New & Updated Models
 
-- **`Product`**: `ProductType` now includes `OPTION`
+- **`Product`**: `ProductType` now includes `OPTION`; added `option_product_details`
+- **`OptionProductDetails`**: Option-specific product fields (strike, expiry, settlement, lot size, price increment steps)
+- **`PriceIncrementStep`**: Tiered price increment override for option products
 - **`ConversionFee`**: Per-pair conversion fee row with month-to-date volume and progressive tiers
 - **`ConversionFeeTier`**: A single tier in the progressive stablecoin conversion schedule
 - **`DerivativePosition`**: A derivative position across product types, including options details
 - **`DerivativesCurrencyBalance`**: Per-currency international derivatives balances
 - **`OptionsDetails`**: Options greeks and strike for a derivative position
+- **`FcmBalance`**: Added `cfm_unsettled_accrued_funding_pnl`
+- **`FcmEquity`**: Prior EOD equity, unrealized P&L, excess/deficit, and available-to-sweep amounts
+- **`TFObligation`**: Trade finance obligation (loan) for an entity
+- **`XMLiquidationDetail`**, **`XMLiquidationSummary`**, **`XMLiquidatedAsset`**: Cross-margin liquidation detail, summary, and per-asset breakdown
+- **`RewardsRateTier`**: A single tier in the rewards rate card
 
 #### New Enums
 
@@ -25,6 +38,9 @@
 - **`DerivativeProductType`**
 - **`OptionType`**
 - **`FcmPositionSide`**
+- **`SettlementPeriod`**
+- **`SettlementModel`**
+- **`RewardsRateTierType`**
 
 ## [0.9.2] - 2026-AUG-5
 

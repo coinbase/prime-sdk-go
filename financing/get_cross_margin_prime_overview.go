@@ -31,10 +31,10 @@ type GetCrossMarginPrimeOverviewRequest struct {
 
 type GetCrossMarginPrimeOverviewResponse struct {
 	ControlStatus model.PrimeXMControlStatus           `json:"control_status,omitempty"`
-	MarginLevel   model.PrimeXMMarginLevel              `json:"margin_level,omitempty"`
-	EvaluatedAt   string                                `json:"evaluated_at,omitempty"`
-	MarginSummary *model.CrossMarginPrimeMarginSummary  `json:"margin_summary,omitempty"`
-	Request       *GetCrossMarginPrimeOverviewRequest   `json:"-"`
+	MarginLevel   model.PrimeXMMarginLevel             `json:"margin_level,omitempty"`
+	EvaluatedAt   string                               `json:"evaluated_at,omitempty"`
+	MarginSummary *model.CrossMarginPrimeMarginSummary `json:"margin_summary,omitempty"`
+	Request       *GetCrossMarginPrimeOverviewRequest  `json:"-"`
 }
 
 func (s *financingServiceImpl) GetCrossMarginPrimeOverview(

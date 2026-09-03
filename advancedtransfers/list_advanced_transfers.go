@@ -103,7 +103,7 @@ func (s *advancedTransfersServiceImpl) ListAdvancedTransfers(
 		serviceConfig: s.serviceConfig,
 	}
 
-	if err := core.HttpGet(
+	if err := client.HttpGet(
 		ctx,
 		s.client,
 		path,

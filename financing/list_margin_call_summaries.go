@@ -58,7 +58,7 @@ func (s *financingServiceImpl) ListMarginCallSummaries(
 
 	response := &ListMarginCallSummariesResponse{Request: request}
 
-	if err := core.HttpGet(
+	if err := client.HttpGet(
 		ctx,
 		s.client,
 		path,

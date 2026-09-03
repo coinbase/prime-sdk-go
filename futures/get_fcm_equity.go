@@ -45,7 +45,7 @@ func (s *futuresServiceImpl) GetFcmEquity(
 
 	response := &GetFcmEquityResponse{Request: request}
 
-	if err := core.HttpGet(
+	if err := client.HttpGet(
 		ctx,
 		s.client,
 		path,

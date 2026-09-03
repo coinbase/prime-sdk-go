@@ -39,7 +39,7 @@ func (s *ordersServiceImpl) CancelOrder(ctx context.Context, request *CancelOrde
 
 	response := &CancelOrderResponse{Request: request}
 
-	if err := core.HttpPost(
+	if err := client.HttpPost(
 		ctx,
 		s.client,
 		path,

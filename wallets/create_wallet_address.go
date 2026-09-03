@@ -44,7 +44,7 @@ func (s *walletsServiceImpl) CreateWalletAddress(ctx context.Context, request *C
 
 	response := &CreateWalletAddressResponse{Request: request}
 
-	if err := core.HttpPost(
+	if err := client.HttpPost(
 		ctx,
 		s.client,
 		path,

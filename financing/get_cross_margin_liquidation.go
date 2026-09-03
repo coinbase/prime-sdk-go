@@ -49,7 +49,7 @@ func (s *financingServiceImpl) GetCrossMarginLiquidation(
 
 	response := &GetCrossMarginLiquidationResponse{Request: request}
 
-	if err := core.HttpGet(
+	if err := client.HttpGet(
 		ctx,
 		s.client,
 		path,

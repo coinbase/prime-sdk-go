@@ -58,7 +58,7 @@ func (s *financingServiceImpl) ListMarginConversions(
 
 	response := &ListMarginConversionsResponse{Request: request}
 
-	if err := core.HttpGet(
+	if err := client.HttpGet(
 		ctx,
 		s.client,
 		path,

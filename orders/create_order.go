@@ -45,7 +45,7 @@ func (s *ordersServiceImpl) CreateOrder(ctx context.Context, request *CreateOrde
 
 	response := &CreateOrderResponse{Request: request}
 
-	if err := core.HttpPost(
+	if err := client.HttpPost(
 		ctx,
 		s.client,
 		path,

@@ -45,7 +45,7 @@ func (s *futuresServiceImpl) ScheduleEntityFuturesSweep(
 
 	response := &ScheduleEntityFuturesSweepResponse{Request: request}
 
-	if err := core.HttpPost(
+	if err := client.HttpPost(
 		ctx,
 		s.client,
 		path,

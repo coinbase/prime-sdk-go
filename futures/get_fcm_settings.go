@@ -42,7 +42,7 @@ func (s *futuresServiceImpl) GetFcmSettings(
 
 	response := &GetFcmSettingsResponse{Request: request}
 
-	if err := core.HttpGet(
+	if err := client.HttpGet(
 		ctx,
 		s.client,
 		path,

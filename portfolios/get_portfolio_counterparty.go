@@ -43,7 +43,7 @@ func (s *portfoliosServiceImpl) GetPortfolioCounterparty(
 
 	response := &GetPortfolioCounterpartyResponse{Request: request}
 
-	if err := core.HttpGet(
+	if err := client.HttpGet(
 		ctx,
 		s.client,
 		path,

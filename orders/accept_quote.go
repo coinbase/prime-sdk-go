@@ -43,7 +43,7 @@ func (s *ordersServiceImpl) AcceptQuote(ctx context.Context, request *AcceptQuot
 
 	response := &AcceptQuoteResponse{Request: request}
 
-	if err := core.HttpPost(
+	if err := client.HttpPost(
 		ctx,
 		s.client,
 		path,

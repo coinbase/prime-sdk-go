@@ -56,7 +56,7 @@ func (s *ordersServiceImpl) EditOrder(
 
 	response := &EditOrderResponse{Request: request}
 
-	if err := core.HttpPut(
+	if err := client.HttpPut(
 		ctx,
 		s.client,
 		path,

@@ -20,7 +20,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/coinbase/core-go"
 	"github.com/coinbase/prime-sdk-go/client"
 	"github.com/coinbase/prime-sdk-go/model"
 )
@@ -64,7 +63,7 @@ func (s *stakingServiceImpl) CreateUnstake(
 
 	response := &CreateUnstakeResponse{Request: request}
 
-	if err := core.HttpPost(
+	if err := client.HttpPost(
 		ctx,
 		s.client,
 		path,

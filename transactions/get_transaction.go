@@ -44,7 +44,7 @@ func (s *transactionsServiceImpl) GetTransaction(
 
 	response := &GetTransactionResponse{Request: request}
 
-	if err := core.HttpGet(
+	if err := client.HttpGet(
 		ctx,
 		s.client,
 		path,

@@ -47,7 +47,7 @@ func (s *advancedTransfersServiceImpl) CancelAdvancedTransfer(
 
 	response := &CancelAdvancedTransferResponse{Request: request}
 
-	if err := core.HttpPost(
+	if err := client.HttpPost(
 		ctx,
 		s.client,
 		path,

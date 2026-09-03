@@ -24,6 +24,13 @@
 - **`XMLiquidationDetail`**, **`XMLiquidationSummary`**, **`XMLiquidatedAsset`**: Cross-margin liquidation detail, summary, and per-asset breakdown
 - **`RewardsRateTier`**: A single tier in the rewards rate card
 
+#### Error codes and subcodes
+
+- **`model/errors`**: Typed Prime REST `ErrorCode` and `Subcode` constants generated from OpenAPI `x-error-codes` / `x-subcodes`, with spec descriptions on each constant
+- **`client.HttpGet` / `HttpPost` / `HttpPut` / `HttpDelete` / `HttpPatch`**: SDK HTTP helpers that parse `{ code, message, subcode, trace_id }` into `*errors.APIError`
+- Helpers: `errors.From`, `IsCode`, `IsSubcode`, `(*APIError).Format`, `Retryable`
+- **`examples/advanced/errorHandling`**: Sample that inspects `*errors.APIError` with `From`, `IsSubcode`, `IsCode`, `Format`, and `Retryable`
+
 #### New Enums
 
 - **`SettlementPeriod`**

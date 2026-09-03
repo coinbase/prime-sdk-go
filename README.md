@@ -51,6 +51,40 @@ service := portfolios.NewPortfoliosService(client)
 response, err := service.ListPortfolios(ctx, &portfolios.ListPortfoliosRequest{})
 ```
 
+## Error handling
+
+HTTP error responses from the Prime REST API include `code`, `message`, `subcode`, and `trace_id`. Service methods return these as `*errors.APIError` from [`model/errors`](model/errors). Typed constants are generated from the OpenAPI `x-error-codes` and `x-subcodes` lists (hover a constant in an IDE to see its spec description).
+
+```
+import (
+    primeerrors "github.com/coinbase/prime-sdk-go/model/errors"
+)
+
+resp, err := ordersService.CreateOrder(ctx, req)
+if err != nil {
+    if apiErr, ok := primeerrors.From(err); ok {
+        if primeerrors.IsSubcode(err, primeerrors.SubcodeOrderDuplicateClientOrderId) {
+            // handle a duplicate client_order_id
+        }
+        log.Printf("order failed: %s", apiErr.Format())
+    }
+    return err
+}
+```
+
+A runnable sample is in [`examples/advanced/errorHandling`](examples/advanced/errorHandling/cmd.go):
+
+```bash
+go run ./examples/advanced/errorHandling
+```
+
+Regenerate error constants after fetching a new spec:
+
+```bash
+make fetch-spec
+make gen-errors
+```
+
 ## Build
 
 To build the sample library, ensure that [Go](https://go.dev/) 1.19+ is installed and then run:

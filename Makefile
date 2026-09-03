@@ -1,4 +1,4 @@
-.PHONY: fetch-spec lint format test tools
+.PHONY: fetch-spec gen-errors lint format test tools
 
 GOLANGCI_LINT ?= golangci-lint
 # Match golangci/golangci-lint-action@v7 (see .github/workflows/lint.yml).
@@ -10,6 +10,11 @@ GOLANGCI_LINT_VERSION ?= v2.1.6
 fetch-spec:
 	@mkdir -p apiSpec
 	curl -o apiSpec/prime-public-api-spec.yaml https://api.prime.coinbase.com/v1/openapi.yaml
+
+# Generate model/errors constants and metadata from x-error-codes / x-subcodes.
+gen-errors:
+	go run ./tools/gen_errors -spec apiSpec/prime-public-api-spec.yaml -out model/errors
+	gofmt -w model/errors/*_gen.go
 
 # The GitHub Actions "format" job runs golangci-lint at the repository root.
 lint format:

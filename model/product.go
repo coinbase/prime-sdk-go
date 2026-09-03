@@ -136,6 +136,49 @@ type RfqProductDetails struct {
 	MaxNotionalSize string `json:"max_notional_size"`
 }
 
+// SettlementPeriod represents how often a derivative contract expires and settles.
+type SettlementPeriod string
+
+const (
+	SettlementPeriodUnspecified SettlementPeriod = "SETTLEMENT_PERIOD_UNSPECIFIED"
+	SettlementPeriodPerpetual   SettlementPeriod = "SETTLEMENT_PERIOD_PERPETUAL"
+	SettlementPeriodDay         SettlementPeriod = "SETTLEMENT_PERIOD_DAY"
+	SettlementPeriodWeek        SettlementPeriod = "SETTLEMENT_PERIOD_WEEK"
+	SettlementPeriodMonth       SettlementPeriod = "SETTLEMENT_PERIOD_MONTH"
+)
+
+// SettlementModel represents the currency a derivative contract settles in.
+type SettlementModel string
+
+const (
+	SettlementModelUnspecified SettlementModel = "SETTLEMENT_MODEL_UNSPECIFIED"
+	SettlementModelLinear      SettlementModel = "SETTLEMENT_MODEL_LINEAR"
+	SettlementModelInverse     SettlementModel = "SETTLEMENT_MODEL_INVERSE"
+)
+
+// PriceIncrementStep overrides the product's price_increment for prices above a threshold.
+type PriceIncrementStep struct {
+	PriceThreshold string `json:"price_threshold,omitempty"`
+	PriceIncrement string `json:"price_increment,omitempty"`
+}
+
+// OptionProductDetails contains details specific to option products.
+type OptionProductDetails struct {
+	OptionType          OptionType            `json:"option_type,omitempty"`
+	Strike              string                `json:"strike,omitempty"`
+	ContractRootUnit    string                `json:"contract_root_unit,omitempty"`
+	SettlementCurrency  string                `json:"settlement_currency,omitempty"`
+	ContractCode        string                `json:"contract_code,omitempty"`
+	GroupDescription    string                `json:"group_description,omitempty"`
+	ContractSize        string                `json:"contract_size,omitempty"`
+	ContractExpiry      string                `json:"contract_expiry,omitempty"`
+	SettlementPeriod    SettlementPeriod      `json:"settlement_period,omitempty"`
+	SettlementModel     SettlementModel       `json:"settlement_model,omitempty"`
+	CounterCurrency     string                `json:"counter_currency,omitempty"`
+	LotSize             string                `json:"lot_size,omitempty"`
+	PriceIncrementSteps []*PriceIncrementStep `json:"price_increment_steps,omitempty"`
+}
+
 type Product struct {
 	Id                       string                    `json:"id"`
 	BaseIncrement            string                    `json:"base_increment"`
@@ -150,6 +193,7 @@ type Product struct {
 	ProductType              ProductType               `json:"product_type,omitempty"`
 	FcmTradingSessionDetails *FcmTradingSessionDetails `json:"fcm_trading_session_details,omitempty"`
 	FutureProductDetails     *FutureProductDetails     `json:"future_product_details,omitempty"`
+	OptionProductDetails     *OptionProductDetails     `json:"option_product_details,omitempty"`
 }
 
 func (p Product) BaseMinSizeNum() (amount decimal.Decimal, err error) {

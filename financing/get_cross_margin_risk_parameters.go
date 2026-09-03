@@ -30,12 +30,12 @@ type GetCrossMarginRiskParametersRequest struct {
 }
 
 type GetCrossMarginRiskParametersResponse struct {
-	RiskParameters              []*model.CrossMarginRiskParameters `json:"risk_parameters"`
-	OffsetCreditMatrixLongShort []*model.TierPairRateEntry         `json:"offset_credit_matrix_long_short"`
-	OffsetCreditMatrixLongLong  []*model.TierPairRateEntry         `json:"offset_credit_matrix_long_long"`
-	OffsetCreditMatrixShortShort []*model.TierPairRateEntry        `json:"offset_credit_matrix_short_short"`
-	MarginPeriodOfRisk          float64                            `json:"margin_period_of_risk"`
-	Request                     *GetCrossMarginRiskParametersRequest `json:"-"`
+	RiskParameters               []*model.CrossMarginRiskParameters   `json:"risk_parameters"`
+	OffsetCreditMatrixLongShort  []*model.TierPairRateEntry           `json:"offset_credit_matrix_long_short"`
+	OffsetCreditMatrixLongLong   []*model.TierPairRateEntry           `json:"offset_credit_matrix_long_long"`
+	OffsetCreditMatrixShortShort []*model.TierPairRateEntry           `json:"offset_credit_matrix_short_short"`
+	MarginPeriodOfRisk           float64                              `json:"margin_period_of_risk"`
+	Request                      *GetCrossMarginRiskParametersRequest `json:"-"`
 }
 
 func (s *financingServiceImpl) GetCrossMarginRiskParameters(

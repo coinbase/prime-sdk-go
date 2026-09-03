@@ -33,8 +33,8 @@ type GetMarketDataRequest struct {
 
 type GetMarketDataResponse struct {
 	model.PaginationMixin
-	MarketData    []*model.MarketData    `json:"market_data"`
-	Request       *GetMarketDataRequest  `json:"-"`
+	MarketData    []*model.MarketData   `json:"market_data"`
+	Request       *GetMarketDataRequest `json:"-"`
 	service       FinancingService
 	serviceConfig *model.ServiceConfig
 }

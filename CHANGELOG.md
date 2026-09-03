@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.11.0] - 2026-SEP-02
+
+### Added
+
+#### New API Endpoints
+
+- **`GetCrossMarginLiquidation`**: Get detailed cross-margin liquidation data for an entity (`GET /entities/{entity_id}/cross_margin/liquidation`)
+- **`ListCrossMarginLiquidations`**: List historical cross-margin liquidations for an entity (`GET /entities/{entity_id}/cross_margin/liquidations`)
+- **`ListTradeFinanceObligations`**: List trade finance obligations for an entity (`GET /entities/{entity_id}/tf_obligations`)
+- **`GetFcmEquity`**: Retrieve FCM equity data for an entity (`GET /entities/{entity_id}/futures/equity`)
+- **`GetEntityRewardsRate`**: Get current rewards rate and available tiers for an entity (beta) (`GET /entities/{entity_id}/rewards/rate`)
+- **`GetPortfolioRewardsRate`**: Get current rewards rate and available tiers for a portfolio (beta) (`GET /portfolios/{portfolio_id}/rewards/rate`)
+
+#### New & Updated Models
+
+- **`Product`**: Added `option_product_details`
+- **`OptionProductDetails`**: Option-specific product fields (strike, expiry, settlement, lot size, price increment steps)
+- **`PriceIncrementStep`**: Tiered price increment override for option products
+- **`FcmBalance`**: Added `cfm_unsettled_accrued_funding_pnl`
+- **`FcmEquity`**: Prior EOD equity, unrealized P&L, excess/deficit, and available-to-sweep amounts
+- **`TFObligation`**: Trade finance obligation (loan) for an entity
+- **`XMLiquidationDetail`**, **`XMLiquidationSummary`**, **`XMLiquidatedAsset`**: Cross-margin liquidation detail, summary, and per-asset breakdown
+- **`RewardsRateTier`**: A single tier in the rewards rate card
+
+#### New Enums
+
+- **`SettlementPeriod`**
+- **`SettlementModel`**
+- **`RewardsRateTierType`**
+
 ## [0.10.0] - 2026-AUG-28
 
 ### Added

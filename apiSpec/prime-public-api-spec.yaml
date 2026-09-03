@@ -472,6 +472,18 @@ tags:
     errorCode: REQUIRED_FIELD_MISSING
     httpStatus: 400
     description: The amount field is required but was not provided.
+  - name: REWARDS_API_FEATURE_DISABLED
+    errorCode: PERMISSION_DENIED
+    httpStatus: 403
+    description: The Rewards Rate API is not enabled for this entity or portfolio.
+  - name: REWARDS_REQUEST_INVALID
+    errorCode: VALIDATION_ERROR
+    httpStatus: 400
+    description: The rewards rate request is invalid.
+  - name: REWARDS_ENTITY_NOT_ENROLLED
+    errorCode: FAILED_PRECONDITION
+    httpStatus: 400
+    description: The entity is not enrolled in Prime Rewards.
   - name: CANDLE_REQUEST_INVALID
     errorCode: VALIDATION_ERROR
     httpStatus: 400
@@ -9765,6 +9777,114 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/coinbase.public_rest_api.ServiceUnavailableErrorResponse'
+  /v1/entities/{entity_id}/rewards/rate:
+    get:
+      tags:
+      - Financing
+      summary: Get Entity Rewards Rate (Beta)
+      description: Returns the current rewards rate and available rate tiers for the
+        entity.
+      operationId: PrimeBeta_GetEntityRewardsRate
+      parameters:
+      - name: entity_id
+        in: path
+        description: The ID of the Prime entity whose rewards rate information is
+          requested.
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/coinbase.public_rest_api.beta.GetRewardsRateResponse'
+        "400":
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/coinbase.public_rest_api.GetEntityRewardsRateBadRequestErrorResponse'
+        "403":
+          description: Permission denied. The API key lacks the required scope for
+            this resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/coinbase.public_rest_api.GetEntityRewardsRateForbiddenErrorResponse'
+        "404":
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/coinbase.public_rest_api.GetEntityRewardsRateNotFoundErrorResponse'
+        "429":
+          description: Too many requests. Rate limit exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/coinbase.public_rest_api.TooManyRequestsErrorResponse'
+        "503":
+          description: Service unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/coinbase.public_rest_api.ServiceUnavailableErrorResponse'
+  /v1/portfolios/{portfolio_id}/rewards/rate:
+    get:
+      tags:
+      - Financing
+      summary: Get Portfolio Rewards Rate (Beta)
+      description: Returns the current rewards rate and available rate tiers for the
+        portfolio.
+      operationId: PrimeBeta_GetPortfolioRewardsRate
+      parameters:
+      - name: portfolio_id
+        in: path
+        description: The ID of the Prime portfolio whose rewards rate information
+          is requested.
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/coinbase.public_rest_api.beta.GetRewardsRateResponse'
+        "400":
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/coinbase.public_rest_api.GetPortfolioRewardsRateBadRequestErrorResponse'
+        "403":
+          description: Permission denied. The API key lacks the required scope for
+            this resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/coinbase.public_rest_api.GetPortfolioRewardsRateForbiddenErrorResponse'
+        "404":
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/coinbase.public_rest_api.GetPortfolioRewardsRateNotFoundErrorResponse'
+        "429":
+          description: Too many requests. Rate limit exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/coinbase.public_rest_api.TooManyRequestsErrorResponse'
+        "503":
+          description: Service unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/coinbase.public_rest_api.ServiceUnavailableErrorResponse'
 components:
   schemas:
     coinbase.brokerage.proxy.events.materialized.api.LimitOrderEdit:
@@ -13420,6 +13540,67 @@ components:
           example: insufficient_funds
         signing_status:
           $ref: '#/components/schemas/coinbase.public_rest_api.SigningStatus'
+    coinbase.public_rest_api.OptionProductDetails:
+      title: OptionProductDetails contains details specific to option products
+      type: object
+      properties:
+        option_type:
+          $ref: '#/components/schemas/coinbase.public_rest_api.OptionType'
+        strike:
+          title: Strike price of the option
+          type: string
+          description: Strike price of the option
+          example: "2400"
+        contract_root_unit:
+          title: Contract root unit (underlying asset)
+          type: string
+          description: Contract root unit (underlying asset)
+          example: ETH
+        settlement_currency:
+          title: Currency the option settles in
+          type: string
+          description: Currency the option settles in
+          example: ETH
+        contract_code:
+          title: Contract code identifier
+          type: string
+          description: Contract code identifier
+          example: eth_usd
+        group_description:
+          title: Descriptive name for the product group
+          type: string
+          description: Descriptive name for the product group
+          example: Deribit ETH Inverse Options
+        contract_size:
+          title: Contract size
+          type: string
+          description: Contract size
+          example: "1"
+        contract_expiry:
+          title: Contract expiry timestamp
+          type: string
+          description: Contract expiry timestamp
+          format: date-time
+        settlement_period:
+          $ref: '#/components/schemas/coinbase.public_rest_api.SettlementPeriod'
+        settlement_model:
+          $ref: '#/components/schemas/coinbase.public_rest_api.SettlementModel'
+        counter_currency:
+          title: Currency the option is quoted against
+          type: string
+          description: Currency the option is quoted against
+          example: ETH
+        lot_size:
+          title: Smallest tradable quantity of the contract
+          type: string
+          description: Smallest tradable quantity of the contract
+          example: "10"
+        price_increment_steps:
+          type: array
+          description: Tiered price increments that override price_increment above
+            a threshold; empty when a single price_increment applies
+          items:
+            $ref: '#/components/schemas/coinbase.public_rest_api.PriceIncrementStep'
     coinbase.public_rest_api.OptionType:
       type: string
       description: |-
@@ -14192,6 +14373,25 @@ components:
             $ref: '#/components/schemas/coinbase.public_rest_api.ValidatorUnstakePreview'
       description: PreviewUnstakeResponse contains the response data from previewing
         an unstaking operation.
+    coinbase.public_rest_api.PriceIncrementStep:
+      type: object
+      properties:
+        price_threshold:
+          title: Prices strictly greater than this threshold use this step's price
+            increment
+          type: string
+          description: Prices strictly greater than this threshold use this step's
+            price increment; a price equal to it takes the next lower step
+          example: "0.005"
+        price_increment:
+          title: Minimum price increment applied above the threshold
+          type: string
+          description: Minimum price increment applied to prices above the threshold
+          example: "0.0005"
+      description: |-
+        PriceIncrementStep overrides the product's price_increment for prices above a
+        threshold. A price takes the increment of the highest step whose threshold it
+        strictly exceeds, and the product's price_increment when it exceeds none.
     coinbase.public_rest_api.PrimeXMHealthStatus:
       type: string
       description: |2-
@@ -14376,6 +14576,8 @@ components:
           $ref: '#/components/schemas/coinbase.public_rest_api.FcmTradingSessionDetails'
         future_product_details:
           $ref: '#/components/schemas/coinbase.public_rest_api.FutureProductDetails'
+        option_product_details:
+          $ref: '#/components/schemas/coinbase.public_rest_api.OptionProductDetails'
     coinbase.public_rest_api.ProductPermissions:
       type: string
       enum:
@@ -14580,6 +14782,32 @@ components:
           type: boolean
           description: Success
           example: true
+    coinbase.public_rest_api.SettlementModel:
+      title: SettlementModel represents the currency a derivative contract settles
+        in
+      type: string
+      description: |-
+        - SETTLEMENT_MODEL_UNSPECIFIED: Unspecified settlement model
+         - SETTLEMENT_MODEL_LINEAR: Settles in the quote currency
+         - SETTLEMENT_MODEL_INVERSE: Settles in the base currency
+      enum:
+      - SETTLEMENT_MODEL_LINEAR
+      - SETTLEMENT_MODEL_INVERSE
+    coinbase.public_rest_api.SettlementPeriod:
+      title: SettlementPeriod represents how often a derivative contract expires and
+        settles
+      type: string
+      description: |-
+        - SETTLEMENT_PERIOD_UNSPECIFIED: Unspecified settlement period
+         - SETTLEMENT_PERIOD_PERPETUAL: Contract never expires
+         - SETTLEMENT_PERIOD_DAY: Contract expires daily
+         - SETTLEMENT_PERIOD_WEEK: Contract expires weekly
+         - SETTLEMENT_PERIOD_MONTH: Contract expires monthly
+      enum:
+      - SETTLEMENT_PERIOD_PERPETUAL
+      - SETTLEMENT_PERIOD_DAY
+      - SETTLEMENT_PERIOD_WEEK
+      - SETTLEMENT_PERIOD_MONTH
     coinbase.public_rest_api.ShortCollateral:
       type: object
       properties:
@@ -16084,6 +16312,48 @@ components:
         * [google.type.TimeOfDay][google.type.TimeOfDay]
         * [google.type.DateTime][google.type.DateTime]
         * [google.protobuf.Timestamp][google.protobuf.Timestamp]
+    coinbase.public_rest_api.beta.GetRewardsRateResponse:
+      type: object
+      properties:
+        current_rate:
+          type: string
+          description: The current effective rewards rate.
+          example: "0.045"
+        available_rates:
+          type: array
+          description: "All available rewards rates, including qualifying bounds for\
+            \ each rate."
+          items:
+            $ref: '#/components/schemas/coinbase.public_rest_api.beta.RewardsRateTier'
+      description: GetRewardsRateResponse returns the current rewards rate and the
+        available rates.
+    coinbase.public_rest_api.beta.RewardsRateTier:
+      type: object
+      properties:
+        rate:
+          type: string
+          description: Rate for this tier.
+          example: "0.045"
+        lower_limit:
+          type: string
+          description: Lower bound of the tier's qualifying criteria (e.g. balance
+            floor).
+          example: "0"
+        upper_limit:
+          type: string
+          description: Upper bound of the tier's qualifying criteria.
+          example: "1000000"
+        criteria_type:
+          $ref: '#/components/schemas/coinbase.public_rest_api.beta.RewardsRateTierType'
+      description: RewardsRateTier is a single tier in the rewards rate card.
+    coinbase.public_rest_api.beta.RewardsRateTierType:
+      type: string
+      description: RewardsRateTierType describes what a rewards rate tier is scoped
+        by.
+      enum:
+      - REWARDS_RATE_TIER_TYPE_BALANCE
+      - REWARDS_RATE_TIER_TYPE_OPEN_INTEREST
+      - REWARDS_RATE_TIER_TYPE_PERCENT_VOLUME
     coinbase.public_rest_api.AcceptQuoteBadRequestErrorResponse:
       type: object
       properties:
@@ -18200,6 +18470,64 @@ components:
       enum:
       - AUTH_RESOURCE_NOT_FOUND
       - PAYMENT_METHOD_NOT_FOUND
+    coinbase.public_rest_api.GetEntityRewardsRateBadRequestErrorResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/coinbase.public_rest_api.BadRequestErrorCode'
+        message:
+          type: string
+        subcode:
+          $ref: '#/components/schemas/coinbase.public_rest_api.GetEntityRewardsRateBadRequestSubcode'
+        trace_id:
+          type: string
+      description: GetEntityRewardsRateBadRequestErrorResponse documents the HTTP
+        400 error body.
+    coinbase.public_rest_api.GetEntityRewardsRateBadRequestSubcode:
+      type: string
+      enum:
+      - ENTITY_ID_REQUIRED
+      - ENTITY_ID_INVALID
+      - REWARDS_REQUEST_INVALID
+      - REWARDS_ENTITY_NOT_ENROLLED
+    coinbase.public_rest_api.GetEntityRewardsRateForbiddenErrorResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/coinbase.public_rest_api.ForbiddenErrorCode'
+        message:
+          type: string
+        subcode:
+          $ref: '#/components/schemas/coinbase.public_rest_api.GetEntityRewardsRateForbiddenSubcode'
+        trace_id:
+          type: string
+      description: GetEntityRewardsRateForbiddenErrorResponse documents the HTTP 403
+        error body.
+    coinbase.public_rest_api.GetEntityRewardsRateForbiddenSubcode:
+      type: string
+      enum:
+      - AUTH_RESOURCE_ACCESS_DENIED
+      - MTLS_CERTIFICATE_REQUIRED
+      - MTLS_CERTIFICATE_REVOKED
+      - MTLS_CERTIFICATE_INVALID
+      - REWARDS_API_FEATURE_DISABLED
+    coinbase.public_rest_api.GetEntityRewardsRateNotFoundErrorResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/coinbase.public_rest_api.NotFoundErrorCode'
+        message:
+          type: string
+        subcode:
+          $ref: '#/components/schemas/coinbase.public_rest_api.GetEntityRewardsRateNotFoundSubcode'
+        trace_id:
+          type: string
+      description: GetEntityRewardsRateNotFoundErrorResponse documents the HTTP 404
+        error body.
+    coinbase.public_rest_api.GetEntityRewardsRateNotFoundSubcode:
+      type: string
+      enum:
+      - AUTH_RESOURCE_NOT_FOUND
     coinbase.public_rest_api.GetEntityUsersBadRequestErrorResponse:
       type: object
       properties:
@@ -19981,6 +20309,64 @@ components:
       - ENTITY_NOT_FOUND
       - PORTFOLIO_NOT_FOUND
       - PRODUCT_NOT_FOUND
+    coinbase.public_rest_api.GetPortfolioRewardsRateBadRequestErrorResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/coinbase.public_rest_api.BadRequestErrorCode'
+        message:
+          type: string
+        subcode:
+          $ref: '#/components/schemas/coinbase.public_rest_api.GetPortfolioRewardsRateBadRequestSubcode'
+        trace_id:
+          type: string
+      description: GetPortfolioRewardsRateBadRequestErrorResponse documents the HTTP
+        400 error body.
+    coinbase.public_rest_api.GetPortfolioRewardsRateBadRequestSubcode:
+      type: string
+      enum:
+      - PORTFOLIO_ID_REQUIRED
+      - PORTFOLIO_ID_INVALID
+      - REWARDS_REQUEST_INVALID
+      - REWARDS_ENTITY_NOT_ENROLLED
+    coinbase.public_rest_api.GetPortfolioRewardsRateForbiddenErrorResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/coinbase.public_rest_api.ForbiddenErrorCode'
+        message:
+          type: string
+        subcode:
+          $ref: '#/components/schemas/coinbase.public_rest_api.GetPortfolioRewardsRateForbiddenSubcode'
+        trace_id:
+          type: string
+      description: GetPortfolioRewardsRateForbiddenErrorResponse documents the HTTP
+        403 error body.
+    coinbase.public_rest_api.GetPortfolioRewardsRateForbiddenSubcode:
+      type: string
+      enum:
+      - AUTH_RESOURCE_ACCESS_DENIED
+      - MTLS_CERTIFICATE_REQUIRED
+      - MTLS_CERTIFICATE_REVOKED
+      - MTLS_CERTIFICATE_INVALID
+      - REWARDS_API_FEATURE_DISABLED
+    coinbase.public_rest_api.GetPortfolioRewardsRateNotFoundErrorResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/coinbase.public_rest_api.NotFoundErrorCode'
+        message:
+          type: string
+        subcode:
+          $ref: '#/components/schemas/coinbase.public_rest_api.GetPortfolioRewardsRateNotFoundSubcode'
+        trace_id:
+          type: string
+      description: GetPortfolioRewardsRateNotFoundErrorResponse documents the HTTP
+        404 error body.
+    coinbase.public_rest_api.GetPortfolioRewardsRateNotFoundSubcode:
+      type: string
+      enum:
+      - AUTH_RESOURCE_NOT_FOUND
     coinbase.public_rest_api.GetPortfolioTransactionsBadRequestErrorResponse:
       type: object
       properties:
@@ -24661,6 +25047,44 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/coinbase.public_rest_api.GetCrossMarginPrimeOverviewNotFoundErrorResponse'
+    GetEntityRewardsRateBadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/coinbase.public_rest_api.GetEntityRewardsRateBadRequestErrorResponse'
+    GetEntityRewardsRateForbidden:
+      description: Permission denied. The API key lacks the required scope for this
+        resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/coinbase.public_rest_api.GetEntityRewardsRateForbiddenErrorResponse'
+    GetEntityRewardsRateNotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/coinbase.public_rest_api.GetEntityRewardsRateNotFoundErrorResponse'
+    GetPortfolioRewardsRateBadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/coinbase.public_rest_api.GetPortfolioRewardsRateBadRequestErrorResponse'
+    GetPortfolioRewardsRateForbidden:
+      description: Permission denied. The API key lacks the required scope for this
+        resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/coinbase.public_rest_api.GetPortfolioRewardsRateForbiddenErrorResponse'
+    GetPortfolioRewardsRateNotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/coinbase.public_rest_api.GetPortfolioRewardsRateNotFoundErrorResponse'
 x-readme:
   explorer-enabled: false
   samples-enabled: false

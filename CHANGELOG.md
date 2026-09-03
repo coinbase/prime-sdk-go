@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.12.0] - 2026-SEP-03
+
+### Added
+
+- **`model/errors`**: Typed Prime REST `ErrorCode` and `Subcode` constants generated from OpenAPI `x-error-codes` / `x-subcodes`, with spec descriptions on each constant
+- **`client.HttpGet` / `HttpPost` / `HttpPut` / `HttpDelete` / `HttpPatch`**: SDK HTTP helpers that parse `{ code, message, subcode, trace_id }` into `*errors.APIError`
+- Helpers: `errors.From`, `IsCode`, `IsSubcode`, `(*APIError).Format`, `Retryable`
+- **`examples/advanced/errorHandling`**: Sample that inspects `*errors.APIError` with `From`, `IsSubcode`, `IsCode`, `Format`, and `Retryable`
+
+### Changed
+
+- **Breaking:** HTTP error responses from service methods are now `*errors.APIError` instead of `*core.ApiError`. Callers using `errors.As` against `*core.ApiError` for API failures should switch to `errors.From` / `IsCode` / `IsSubcode`.
+
 ## [0.11.0] - 2026-SEP-02
 
 ### Added
@@ -23,13 +36,6 @@
 - **`TFObligation`**: Trade finance obligation (loan) for an entity
 - **`XMLiquidationDetail`**, **`XMLiquidationSummary`**, **`XMLiquidatedAsset`**: Cross-margin liquidation detail, summary, and per-asset breakdown
 - **`RewardsRateTier`**: A single tier in the rewards rate card
-
-#### Error codes and subcodes
-
-- **`model/errors`**: Typed Prime REST `ErrorCode` and `Subcode` constants generated from OpenAPI `x-error-codes` / `x-subcodes`, with spec descriptions on each constant
-- **`client.HttpGet` / `HttpPost` / `HttpPut` / `HttpDelete` / `HttpPatch`**: SDK HTTP helpers that parse `{ code, message, subcode, trace_id }` into `*errors.APIError`
-- Helpers: `errors.From`, `IsCode`, `IsSubcode`, `(*APIError).Format`, `Retryable`
-- **`examples/advanced/errorHandling`**: Sample that inspects `*errors.APIError` with `From`, `IsSubcode`, `IsCode`, `Format`, and `Retryable`
 
 #### New Enums
 

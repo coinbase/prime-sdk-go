@@ -21,11 +21,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/coinbase/prime-sdk-go/client"
 	"github.com/coinbase/prime-sdk-go/credentials"
 	"github.com/coinbase/prime-sdk-go/financing"
-	"github.com/coinbase/prime-sdk-go/model"
 )
 
 func main() {
@@ -44,16 +44,17 @@ func main() {
 
 	svc := financing.NewFinancingService(restClient)
 
-	request := &financing.ListXMLiquidationsRequest{
+	request := &financing.GetCrossMarginLiquidationRequest{
 		EntityId: credentials.EntityId,
-		Pagination: &model.PaginationParams{
-			Limit: 100,
-		},
 	}
 
-	response, err := svc.ListXMLiquidations(context.Background(), request)
+	if len(os.Args) > 1 {
+		request.LiquidationId = os.Args[1]
+	}
+
+	response, err := svc.GetCrossMarginLiquidation(context.Background(), request)
 	if err != nil {
-		log.Fatalf("unable to list XM liquidations: %v", err)
+		log.Fatalf("unable to get XM liquidation: %v", err)
 	}
 
 	output, err := json.MarshalIndent(response, "", "  ")

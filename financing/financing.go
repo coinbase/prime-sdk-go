@@ -43,9 +43,9 @@ type FinancingService interface {
 	ListMarginConversions(ctx context.Context, request *ListMarginConversionsRequest) (*ListMarginConversionsResponse, error)
 	ListFinancingEligibleAssets(ctx context.Context, request *ListFinancingEligibleAssetsRequest) (*ListFinancingEligibleAssetsResponse, error)
 	GetConversionFees(ctx context.Context, request *GetConversionFeesRequest) (*GetConversionFeesResponse, error)
-	GetXMLiquidation(ctx context.Context, request *GetXMLiquidationRequest) (*GetXMLiquidationResponse, error)
-	ListXMLiquidations(ctx context.Context, request *ListXMLiquidationsRequest) (*ListXMLiquidationsResponse, error)
-	ListTFObligations(ctx context.Context, request *ListTFObligationsRequest) (*ListTFObligationsResponse, error)
+	GetCrossMarginLiquidation(ctx context.Context, request *GetCrossMarginLiquidationRequest) (*GetCrossMarginLiquidationResponse, error)
+	ListCrossMarginLiquidations(ctx context.Context, request *ListCrossMarginLiquidationsRequest) (*ListCrossMarginLiquidationsResponse, error)
+	ListTradeFinanceObligations(ctx context.Context, request *ListTradeFinanceObligationsRequest) (*ListTradeFinanceObligationsResponse, error)
 	GetEntityRewardsRate(ctx context.Context, request *GetEntityRewardsRateRequest) (*GetEntityRewardsRateResponse, error)
 	GetPortfolioRewardsRate(ctx context.Context, request *GetPortfolioRewardsRateRequest) (*GetPortfolioRewardsRateResponse, error)
 	ServiceConfig() *model.ServiceConfig

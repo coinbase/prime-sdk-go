@@ -25,6 +25,7 @@ import (
 	"github.com/coinbase/prime-sdk-go/client"
 	"github.com/coinbase/prime-sdk-go/credentials"
 	"github.com/coinbase/prime-sdk-go/financing"
+	"github.com/coinbase/prime-sdk-go/model"
 )
 
 func main() {
@@ -43,13 +44,16 @@ func main() {
 
 	svc := financing.NewFinancingService(restClient)
 
-	request := &financing.ListTFObligationsRequest{
+	request := &financing.ListCrossMarginLiquidationsRequest{
 		EntityId: credentials.EntityId,
+		Pagination: &model.PaginationParams{
+			Limit: 100,
+		},
 	}
 
-	response, err := svc.ListTFObligations(context.Background(), request)
+	response, err := svc.ListCrossMarginLiquidations(context.Background(), request)
 	if err != nil {
-		log.Fatalf("unable to list TF obligations: %v", err)
+		log.Fatalf("unable to list XM liquidations: %v", err)
 	}
 
 	output, err := json.MarshalIndent(response, "", "  ")

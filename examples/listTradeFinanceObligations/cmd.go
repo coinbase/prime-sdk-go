@@ -21,7 +21,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/coinbase/prime-sdk-go/client"
 	"github.com/coinbase/prime-sdk-go/credentials"
@@ -44,17 +43,13 @@ func main() {
 
 	svc := financing.NewFinancingService(restClient)
 
-	request := &financing.GetXMLiquidationRequest{
+	request := &financing.ListTradeFinanceObligationsRequest{
 		EntityId: credentials.EntityId,
 	}
 
-	if len(os.Args) > 1 {
-		request.LiquidationId = os.Args[1]
-	}
-
-	response, err := svc.GetXMLiquidation(context.Background(), request)
+	response, err := svc.ListTradeFinanceObligations(context.Background(), request)
 	if err != nil {
-		log.Fatalf("unable to get XM liquidation: %v", err)
+		log.Fatalf("unable to list TF obligations: %v", err)
 	}
 
 	output, err := json.MarshalIndent(response, "", "  ")

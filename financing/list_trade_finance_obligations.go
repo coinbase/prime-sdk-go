@@ -25,23 +25,23 @@ import (
 	"github.com/coinbase/prime-sdk-go/model"
 )
 
-type ListTFObligationsRequest struct {
+type ListTradeFinanceObligationsRequest struct {
 	EntityId string `json:"-"`
 }
 
-type ListTFObligationsResponse struct {
-	Obligations []*model.TFObligation     `json:"obligations"`
-	Request     *ListTFObligationsRequest `json:"-"`
+type ListTradeFinanceObligationsResponse struct {
+	Obligations []*model.TFObligation               `json:"obligations"`
+	Request     *ListTradeFinanceObligationsRequest `json:"-"`
 }
 
-func (s *financingServiceImpl) ListTFObligations(
+func (s *financingServiceImpl) ListTradeFinanceObligations(
 	ctx context.Context,
-	request *ListTFObligationsRequest,
-) (*ListTFObligationsResponse, error) {
+	request *ListTradeFinanceObligationsRequest,
+) (*ListTradeFinanceObligationsResponse, error) {
 
 	path := fmt.Sprintf("/entities/%s/tf_obligations", request.EntityId)
 
-	response := &ListTFObligationsResponse{Request: request}
+	response := &ListTradeFinanceObligationsResponse{Request: request}
 
 	if err := core.HttpGet(
 		ctx,

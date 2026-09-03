@@ -25,20 +25,20 @@ import (
 	"github.com/coinbase/prime-sdk-go/model"
 )
 
-type GetXMLiquidationRequest struct {
+type GetCrossMarginLiquidationRequest struct {
 	EntityId      string `json:"-"`
 	LiquidationId string `json:"liquidation_id,omitempty"`
 }
 
-type GetXMLiquidationResponse struct {
-	Liquidation *model.XMLiquidationDetail `json:"liquidation"`
-	Request     *GetXMLiquidationRequest   `json:"-"`
+type GetCrossMarginLiquidationResponse struct {
+	Liquidation *model.XMLiquidationDetail        `json:"liquidation"`
+	Request     *GetCrossMarginLiquidationRequest `json:"-"`
 }
 
-func (s *financingServiceImpl) GetXMLiquidation(
+func (s *financingServiceImpl) GetCrossMarginLiquidation(
 	ctx context.Context,
-	request *GetXMLiquidationRequest,
-) (*GetXMLiquidationResponse, error) {
+	request *GetCrossMarginLiquidationRequest,
+) (*GetCrossMarginLiquidationResponse, error) {
 
 	path := fmt.Sprintf("/entities/%s/cross_margin/liquidation", request.EntityId)
 
@@ -47,7 +47,7 @@ func (s *financingServiceImpl) GetXMLiquidation(
 		queryParams = core.AppendHttpQueryParam(queryParams, "liquidation_id", request.LiquidationId)
 	}
 
-	response := &GetXMLiquidationResponse{Request: request}
+	response := &GetCrossMarginLiquidationResponse{Request: request}
 
 	if err := core.HttpGet(
 		ctx,

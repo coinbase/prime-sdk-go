@@ -26,7 +26,7 @@ import (
 	"github.com/coinbase/prime-sdk-go/utils"
 )
 
-type ListXMLiquidationsRequest struct {
+type ListCrossMarginLiquidationsRequest struct {
 	EntityId   string                    `json:"-"`
 	Status     model.XMLiquidationStatus `json:"status,omitempty"`
 	StartTime  string                    `json:"start_time,omitempty"`
@@ -34,15 +34,15 @@ type ListXMLiquidationsRequest struct {
 	Pagination *model.PaginationParams   `json:"pagination_params,omitempty"`
 }
 
-type ListXMLiquidationsResponse struct {
+type ListCrossMarginLiquidationsResponse struct {
 	model.PaginationMixin
-	Liquidations  []*model.XMLiquidationSummary `json:"liquidations"`
-	Request       *ListXMLiquidationsRequest    `json:"-"`
+	Liquidations  []*model.XMLiquidationSummary       `json:"liquidations"`
+	Request       *ListCrossMarginLiquidationsRequest `json:"-"`
 	service       FinancingService
 	serviceConfig *model.ServiceConfig
 }
 
-func (r *ListXMLiquidationsResponse) Next(ctx context.Context) (*ListXMLiquidationsResponse, error) {
+func (r *ListCrossMarginLiquidationsResponse) Next(ctx context.Context) (*ListCrossMarginLiquidationsResponse, error) {
 	if !r.HasNext() {
 		return nil, nil
 	}
@@ -50,23 +50,23 @@ func (r *ListXMLiquidationsResponse) Next(ctx context.Context) (*ListXMLiquidati
 	nextRequest := *r.Request
 	nextRequest.Pagination = model.PrepareNextPagination(r.Request.Pagination, r.GetNextCursor())
 
-	return r.service.ListXMLiquidations(ctx, &nextRequest)
+	return r.service.ListCrossMarginLiquidations(ctx, &nextRequest)
 }
 
-func (r *ListXMLiquidationsResponse) Iterator() *model.PageIterator[*ListXMLiquidationsResponse, *model.XMLiquidationSummary] {
+func (r *ListCrossMarginLiquidationsResponse) Iterator() *model.PageIterator[*ListCrossMarginLiquidationsResponse, *model.XMLiquidationSummary] {
 	return model.NewPageIteratorWithConfig(
 		r,
-		func(resp *ListXMLiquidationsResponse) []*model.XMLiquidationSummary {
+		func(resp *ListCrossMarginLiquidationsResponse) []*model.XMLiquidationSummary {
 			return resp.Liquidations
 		},
 		r.serviceConfig,
 	)
 }
 
-func (s *financingServiceImpl) ListXMLiquidations(
+func (s *financingServiceImpl) ListCrossMarginLiquidations(
 	ctx context.Context,
-	request *ListXMLiquidationsRequest,
-) (*ListXMLiquidationsResponse, error) {
+	request *ListCrossMarginLiquidationsRequest,
+) (*ListCrossMarginLiquidationsResponse, error) {
 
 	path := fmt.Sprintf("/entities/%s/cross_margin/liquidations", request.EntityId)
 
@@ -84,7 +84,7 @@ func (s *financingServiceImpl) ListXMLiquidations(
 	}
 	queryParams = utils.AppendPaginationParams(queryParams, request.Pagination)
 
-	response := &ListXMLiquidationsResponse{
+	response := &ListCrossMarginLiquidationsResponse{
 		Request:       request,
 		service:       s,
 		serviceConfig: s.serviceConfig,

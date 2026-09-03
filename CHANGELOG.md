@@ -6,9 +6,9 @@
 
 #### New API Endpoints
 
-- **`GetXMLiquidation`**: Get detailed cross-margin liquidation data for an entity (`GET /entities/{entity_id}/cross_margin/liquidation`)
-- **`ListXMLiquidations`**: List historical cross-margin liquidations for an entity (`GET /entities/{entity_id}/cross_margin/liquidations`)
-- **`ListTFObligations`**: List trade finance obligations for an entity (`GET /entities/{entity_id}/tf_obligations`)
+- **`GetCrossMarginLiquidation`**: Get detailed cross-margin liquidation data for an entity (`GET /entities/{entity_id}/cross_margin/liquidation`)
+- **`ListCrossMarginLiquidations`**: List historical cross-margin liquidations for an entity (`GET /entities/{entity_id}/cross_margin/liquidations`)
+- **`ListTradeFinanceObligations`**: List trade finance obligations for an entity (`GET /entities/{entity_id}/tf_obligations`)
 - **`GetFcmEquity`**: Retrieve FCM equity data for an entity (`GET /entities/{entity_id}/futures/equity`)
 - **`GetEntityRewardsRate`**: Get current rewards rate and available tiers for an entity (beta) (`GET /entities/{entity_id}/rewards/rate`)
 - **`GetPortfolioRewardsRate`**: Get current rewards rate and available tiers for a portfolio (beta) (`GET /portfolios/{portfolio_id}/rewards/rate`)

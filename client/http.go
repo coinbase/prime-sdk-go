@@ -17,27 +17,11 @@
 package client
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
-	"fmt"
-	"io"
-	"net/http"
-	"net/url"
-	"time"
 
 	"github.com/coinbase/core-go"
 	apierrors "github.com/coinbase/prime-sdk-go/model/errors"
 )
-
-type apiRequest struct {
-	Path                    string
-	Query                   string
-	HttpMethod              string
-	Body                    []byte
-	ExpectedHttpStatusCodes []int
-	Client                  RestClient
-}
 
 // HttpPost sends a JSON POST request. Unexpected status codes are returned as *errors.APIError.
 func HttpPost(
@@ -50,7 +34,7 @@ func HttpPost(
 	response interface{},
 	headersFunc core.HttpHeaderFunc,
 ) error {
-	return call(ctx, cl, path, query, http.MethodPost, expectedHttpStatusCodes, request, response, headersFunc)
+	return core.HttpPost(ctx, cl, path, query, expectedHttpStatusCodes, request, response, headersFunc, parsePrimeAPIError)
 }
 
 // HttpGet sends a JSON GET request. Unexpected status codes are returned as *errors.APIError.
@@ -64,7 +48,7 @@ func HttpGet(
 	response interface{},
 	headersFunc core.HttpHeaderFunc,
 ) error {
-	return call(ctx, cl, path, query, http.MethodGet, expectedHttpStatusCodes, request, response, headersFunc)
+	return core.HttpGet(ctx, cl, path, query, expectedHttpStatusCodes, request, response, headersFunc, parsePrimeAPIError)
 }
 
 // HttpPut sends a JSON PUT request. Unexpected status codes are returned as *errors.APIError.
@@ -78,7 +62,7 @@ func HttpPut(
 	response interface{},
 	headersFunc core.HttpHeaderFunc,
 ) error {
-	return call(ctx, cl, path, query, http.MethodPut, expectedHttpStatusCodes, request, response, headersFunc)
+	return core.HttpPut(ctx, cl, path, query, expectedHttpStatusCodes, request, response, headersFunc, parsePrimeAPIError)
 }
 
 // HttpDelete sends a JSON DELETE request. Unexpected status codes are returned as *errors.APIError.
@@ -92,7 +76,7 @@ func HttpDelete(
 	response interface{},
 	headersFunc core.HttpHeaderFunc,
 ) error {
-	return call(ctx, cl, path, query, http.MethodDelete, expectedHttpStatusCodes, request, response, headersFunc)
+	return core.HttpDelete(ctx, cl, path, query, expectedHttpStatusCodes, request, response, headersFunc, parsePrimeAPIError)
 }
 
 // HttpPatch sends a JSON PATCH request. Unexpected status codes are returned as *errors.APIError.
@@ -106,100 +90,10 @@ func HttpPatch(
 	response interface{},
 	headersFunc core.HttpHeaderFunc,
 ) error {
-	return call(ctx, cl, path, query, http.MethodPatch, expectedHttpStatusCodes, request, response, headersFunc)
+	return core.HttpPatch(ctx, cl, path, query, expectedHttpStatusCodes, request, response, headersFunc, parsePrimeAPIError)
 }
 
-func call(
-	ctx context.Context,
-	cl RestClient,
-	path,
-	query,
-	httpMethod string,
-	expectedHttpStatusCodes []int,
-	request,
-	response interface{},
-	headersFunc core.HttpHeaderFunc,
-) error {
-	body, err := json.Marshal(request)
-	if err != nil {
-		return err
-	}
-
-	resp, err := makeCall(ctx, &apiRequest{
-		Path:                    path,
-		Query:                   query,
-		HttpMethod:              httpMethod,
-		Body:                    body,
-		ExpectedHttpStatusCodes: expectedHttpStatusCodes,
-		Client:                  cl,
-	}, headersFunc)
-	if err != nil {
-		return err
-	}
-
-	if err := json.Unmarshal(resp, response); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func makeCall(ctx context.Context, request *apiRequest, headersFunc core.HttpHeaderFunc) ([]byte, error) {
-	callUrl := fmt.Sprintf("%s%s%s", request.Client.HttpBaseUrl(), request.Path, request.Query)
-
-	parsedUrl, err := url.Parse(callUrl)
-	if err != nil {
-		return nil, &core.ApiError{
-			Message:      fmt.Sprintf("invalid URL: %s - %v", callUrl, err),
-			ParsedUrl:    callUrl,
-			CodeReceived: 0,
-		}
-	}
-
-	var requestBody []byte
-	if request.HttpMethod == http.MethodPost || request.HttpMethod == http.MethodPut || request.HttpMethod == http.MethodPatch {
-		requestBody = request.Body
-	}
-
-	req, err := http.NewRequestWithContext(ctx, request.HttpMethod, callUrl, bytes.NewReader(requestBody))
-	if err != nil {
-		return nil, &core.ApiError{
-			Message:      err.Error(),
-			CodeReceived: 0,
-		}
-	}
-
-	if headersFunc != nil {
-		headersFunc(req, parsedUrl.Path, requestBody, request.Client, time.Now())
-	}
-
-	res, err := request.Client.HttpClient().Do(req)
-	if err != nil {
-		return nil, &core.ApiError{
-			Message:      err.Error(),
-			CodeReceived: 0,
-		}
-	}
-
-	defer func() { _ = res.Body.Close() }()
-	body, err := io.ReadAll(res.Body)
-	if err != nil {
-		return nil, &core.ApiError{
-			Message:      err.Error(),
-			CodeReceived: 0,
-		}
-	}
-
-	for _, code := range request.ExpectedHttpStatusCodes {
-		if res.StatusCode == code {
-			return body, nil
-		}
-	}
-
-	return nil, parseAPIError(body, res.StatusCode, callUrl)
-}
-
-func parseAPIError(body []byte, statusCode int, callUrl string) error {
+func parsePrimeAPIError(body []byte, statusCode int, _ []int, callUrl string) error {
 	resp, err := apierrors.ParseBody(body)
 	if err != nil {
 		resp = apierrors.Response{Message: string(body)}

@@ -53,7 +53,7 @@ response, err := service.ListPortfolios(ctx, &portfolios.ListPortfoliosRequest{}
 
 ## Error handling
 
-HTTP error responses from the Prime REST API include `code`, `message`, `subcode`, and `trace_id`. Service methods return these as `*errors.APIError` from [`model/errors`](model/errors). Typed constants are generated from the OpenAPI `x-error-codes` and `x-subcodes` lists (hover a constant in an IDE to see its spec description).
+HTTP error responses from the Prime REST API include `code`, `message`, `subcode`, and `trace_id`. Service methods return these as `*errors.ApiError` from [`model/errors`](model/errors). Typed constants are generated from the OpenAPI `x-error-codes` and `x-subcodes` lists (hover a constant in an IDE to see its spec description).
 
 ```
 import (

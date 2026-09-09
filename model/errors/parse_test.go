@@ -32,7 +32,7 @@ func TestParseBodyAndFrom(t *testing.T) {
 		t.Fatalf("parsed %+v", resp)
 	}
 
-	apiErr := &APIError{Response: resp, StatusCode: 400, URL: "https://example/orders"}
+	apiErr := &ApiError{Response: resp, StatusCode: 400, URL: "https://example/orders"}
 	wrapped := fmt.Errorf("create order: %w", apiErr)
 	got, ok := From(wrapped)
 	if !ok || got.TraceID != "abc" {
@@ -56,10 +56,10 @@ func TestParseBodyAndFrom(t *testing.T) {
 }
 
 func TestRetryable(t *testing.T) {
-	if !(&APIError{Response: Response{Code: ErrorCodeRateLimitExceeded}}).Retryable() {
+	if !(&ApiError{Response: Response{Code: ErrorCodeRateLimitExceeded}}).Retryable() {
 		t.Fatal("429 should be retryable")
 	}
-	if !(&APIError{Response: Response{Code: ErrorCodeServiceUnavailable}}).Retryable() {
+	if !(&ApiError{Response: Response{Code: ErrorCodeServiceUnavailable}}).Retryable() {
 		t.Fatal("503 should be retryable")
 	}
 }

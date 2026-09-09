@@ -32,32 +32,32 @@ func ParseBody(body []byte) (Response, error) {
 	return resp, nil
 }
 
-// From extracts a Prime APIError from err using errors.As.
-func From(err error) (*APIError, bool) {
+// From extracts a Prime ApiError from err using errors.As.
+func From(err error) (*ApiError, bool) {
 	if err == nil {
 		return nil, false
 	}
-	var apiErr *APIError
+	var apiErr *ApiError
 	if errors.As(err, &apiErr) {
 		return apiErr, true
 	}
 	return nil, false
 }
 
-// IsCode reports whether err is an APIError with the given error code.
+// IsCode reports whether err is an ApiError with the given error code.
 func IsCode(err error, code ErrorCode) bool {
 	apiErr, ok := From(err)
 	return ok && apiErr.Code == code
 }
 
-// IsSubcode reports whether err is an APIError with the given subcode.
+// IsSubcode reports whether err is an ApiError with the given subcode.
 func IsSubcode(err error, sub Subcode) bool {
 	apiErr, ok := From(err)
 	return ok && apiErr.Subcode == sub
 }
 
 // Format returns a human-readable summary including spec description when known.
-func (e *APIError) Format() string {
+func (e *ApiError) Format() string {
 	if e == nil {
 		return ""
 	}
@@ -87,7 +87,7 @@ func (e *APIError) Format() string {
 }
 
 // SubcodeInfo returns spec metadata for this error's subcode, if known.
-func (e *APIError) SubcodeInfo() (SubcodeInfo, bool) {
+func (e *ApiError) SubcodeInfo() (SubcodeInfo, bool) {
 	if e == nil || e.Subcode == "" {
 		return SubcodeInfo{}, false
 	}
@@ -95,7 +95,7 @@ func (e *APIError) SubcodeInfo() (SubcodeInfo, bool) {
 }
 
 // HTTPStatus returns the HTTP status recorded on the error.
-func (e *APIError) HTTPStatus() int {
+func (e *ApiError) HTTPStatus() int {
 	if e == nil {
 		return 0
 	}
@@ -103,7 +103,7 @@ func (e *APIError) HTTPStatus() int {
 }
 
 // Retryable reports whether the error is typically safe to retry after backoff.
-func (e *APIError) Retryable() bool {
+func (e *ApiError) Retryable() bool {
 	if e == nil {
 		return false
 	}

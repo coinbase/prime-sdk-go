@@ -23,7 +23,7 @@ import (
 	apierrors "github.com/coinbase/prime-sdk-go/model/errors"
 )
 
-// HttpPost sends a JSON POST request. Unexpected status codes are returned as *errors.APIError.
+// HttpPost sends a JSON POST request. Unexpected status codes are returned as *errors.ApiError.
 func HttpPost(
 	ctx context.Context,
 	cl RestClient,
@@ -34,10 +34,10 @@ func HttpPost(
 	response interface{},
 	headersFunc core.HttpHeaderFunc,
 ) error {
-	return core.HttpPost(ctx, cl, path, query, expectedHttpStatusCodes, request, response, headersFunc, parsePrimeAPIError)
+	return core.HttpPost(ctx, cl, path, query, expectedHttpStatusCodes, request, response, headersFunc, parsePrimeApiError)
 }
 
-// HttpGet sends a JSON GET request. Unexpected status codes are returned as *errors.APIError.
+// HttpGet sends a JSON GET request. Unexpected status codes are returned as *errors.ApiError.
 func HttpGet(
 	ctx context.Context,
 	cl RestClient,
@@ -48,10 +48,10 @@ func HttpGet(
 	response interface{},
 	headersFunc core.HttpHeaderFunc,
 ) error {
-	return core.HttpGet(ctx, cl, path, query, expectedHttpStatusCodes, request, response, headersFunc, parsePrimeAPIError)
+	return core.HttpGet(ctx, cl, path, query, expectedHttpStatusCodes, request, response, headersFunc, parsePrimeApiError)
 }
 
-// HttpPut sends a JSON PUT request. Unexpected status codes are returned as *errors.APIError.
+// HttpPut sends a JSON PUT request. Unexpected status codes are returned as *errors.ApiError.
 func HttpPut(
 	ctx context.Context,
 	cl RestClient,
@@ -62,10 +62,10 @@ func HttpPut(
 	response interface{},
 	headersFunc core.HttpHeaderFunc,
 ) error {
-	return core.HttpPut(ctx, cl, path, query, expectedHttpStatusCodes, request, response, headersFunc, parsePrimeAPIError)
+	return core.HttpPut(ctx, cl, path, query, expectedHttpStatusCodes, request, response, headersFunc, parsePrimeApiError)
 }
 
-// HttpDelete sends a JSON DELETE request. Unexpected status codes are returned as *errors.APIError.
+// HttpDelete sends a JSON DELETE request. Unexpected status codes are returned as *errors.ApiError.
 func HttpDelete(
 	ctx context.Context,
 	cl RestClient,
@@ -76,10 +76,10 @@ func HttpDelete(
 	response interface{},
 	headersFunc core.HttpHeaderFunc,
 ) error {
-	return core.HttpDelete(ctx, cl, path, query, expectedHttpStatusCodes, request, response, headersFunc, parsePrimeAPIError)
+	return core.HttpDelete(ctx, cl, path, query, expectedHttpStatusCodes, request, response, headersFunc, parsePrimeApiError)
 }
 
-// HttpPatch sends a JSON PATCH request. Unexpected status codes are returned as *errors.APIError.
+// HttpPatch sends a JSON PATCH request. Unexpected status codes are returned as *errors.ApiError.
 func HttpPatch(
 	ctx context.Context,
 	cl RestClient,
@@ -90,15 +90,15 @@ func HttpPatch(
 	response interface{},
 	headersFunc core.HttpHeaderFunc,
 ) error {
-	return core.HttpPatch(ctx, cl, path, query, expectedHttpStatusCodes, request, response, headersFunc, parsePrimeAPIError)
+	return core.HttpPatch(ctx, cl, path, query, expectedHttpStatusCodes, request, response, headersFunc, parsePrimeApiError)
 }
 
-func parsePrimeAPIError(body []byte, statusCode int, _ []int, callUrl string) error {
+func parsePrimeApiError(body []byte, statusCode int, _ []int, callUrl string) error {
 	resp, err := apierrors.ParseBody(body)
 	if err != nil {
 		resp = apierrors.Response{Message: string(body)}
 	}
-	return &apierrors.APIError{
+	return &apierrors.ApiError{
 		Response:   resp,
 		StatusCode: statusCode,
 		URL:        callUrl,

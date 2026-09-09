@@ -32,8 +32,8 @@ type Response struct {
 	TraceID string    `json:"trace_id,omitempty"`
 }
 
-// APIError is the typed Prime REST error returned by client.Http* helpers.
-type APIError struct {
+// ApiError is the typed Prime REST error returned by client.Http* helpers.
+type ApiError struct {
 	Response
 	// StatusCode is the HTTP status received from the API.
 	StatusCode int
@@ -41,7 +41,7 @@ type APIError struct {
 	URL string
 }
 
-func (e *APIError) Error() string {
+func (e *ApiError) Error() string {
 	if e == nil {
 		return ""
 	}

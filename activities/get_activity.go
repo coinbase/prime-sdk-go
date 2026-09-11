@@ -44,7 +44,7 @@ func (s *activitiesServiceImpl) GetActivity(
 
 	response := &GetActivityResponse{Request: request}
 
-	if err := core.HttpGet(
+	if err := client.HttpGet(
 		ctx,
 		s.client,
 		path,

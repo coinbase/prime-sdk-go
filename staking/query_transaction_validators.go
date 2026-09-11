@@ -79,7 +79,7 @@ func (s *stakingServiceImpl) QueryTransactionValidators(
 		serviceConfig: s.serviceConfig,
 	}
 
-	if err := core.HttpPost(
+	if err := client.HttpPost(
 		ctx,
 		s.client,
 		path,

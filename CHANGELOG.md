@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.12.0] - 2026-SEP-08
+
+### Added
+
+- **`model/errors`**: Typed Prime REST `ErrorCode` and `Subcode` constants generated from OpenAPI `x-error-codes` / `x-subcodes`, with spec descriptions on each constant
+- **`client.HttpGet` / `HttpPost` / `HttpPut` / `HttpDelete` / `HttpPatch`**: SDK HTTP helpers that parse `{ code, message, subcode, trace_id }` into `*errors.ApiError`
+- Helpers: `errors.From`, `IsCode`, `IsSubcode`, `(*ApiError).Format`, `Retryable`
+- **`examples/advanced/errorHandling`**: Sample that inspects `*errors.ApiError` with `From`, `IsSubcode`, `IsCode`, `Format`, and `Retryable`
+
+### Changed
+
+- **Breaking:** HTTP error responses from service methods are now `*errors.ApiError` instead of `*core.ApiError`. Callers using `errors.As` against `*core.ApiError` for API failures should switch to `errors.From` / `IsCode` / `IsSubcode`.
+- HTTP helpers delegate to `core-go` v0.4.0 `Http*` with a Prime `ErrorParserFunc`. Unexpected REST statuses remain `*errors.ApiError`. Service method signatures are unchanged.
+
 ## [0.11.0] - 2026-SEP-02
 
 ### Added

@@ -59,7 +59,7 @@ func (s *transactionsServiceImpl) CreateWalletTransfer(
 
 	response := &CreateWalletTransferResponse{Request: request}
 
-	if err := core.HttpPost(
+	if err := client.HttpPost(
 		ctx,
 		s.client,
 		path,

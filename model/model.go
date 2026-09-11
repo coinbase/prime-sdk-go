@@ -16,7 +16,10 @@
 
 package model
 
-// ErrorMessage represents a generic error response
+// ErrorMessage represents a generic error response.
+//
+// Deprecated: use [github.com/coinbase/prime-sdk-go/model/errors.Response] and
+// [github.com/coinbase/prime-sdk-go/model/errors.ApiError] instead.
 type ErrorMessage struct {
 	Value string `json:"message"`
 }

@@ -49,7 +49,7 @@ func (s *stakingServiceImpl) PortfolioUnstake(
 
 	response := &PortfolioUnstakeResponse{Request: request}
 
-	if err := core.HttpPost(
+	if err := client.HttpPost(
 		ctx,
 		s.client,
 		path,

@@ -20,7 +20,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/coinbase/core-go"
 	"github.com/coinbase/prime-sdk-go/client"
 	"github.com/coinbase/prime-sdk-go/model"
 )
@@ -45,7 +44,7 @@ func (s *financingServiceImpl) GetMarginInfo(
 
 	response := &GetMarginInfoResponse{Request: request}
 
-	if err := core.HttpGet(
+	if err := client.HttpGet(
 		ctx,
 		s.client,
 		path,

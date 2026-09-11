@@ -43,7 +43,7 @@ func (s *onchainAddressBookServiceImpl) ListOnchainAddressBookGroups(
 
 	response := &ListOnchainAddressBookGroupsResponse{Request: request}
 
-	if err := core.HttpGet(
+	if err := client.HttpGet(
 		ctx,
 		s.client,
 		path,

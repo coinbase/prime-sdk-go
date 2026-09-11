@@ -44,7 +44,7 @@ func (s *advancedTransfersServiceImpl) CreateAdvancedTransfer(
 
 	response := &CreateAdvancedTransferResponse{Request: request}
 
-	if err := core.HttpPost(
+	if err := client.HttpPost(
 		ctx,
 		s.client,
 		path,

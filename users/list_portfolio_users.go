@@ -48,7 +48,7 @@ func (s *usersServiceImpl) ListPortfolioUsers(
 
 	response := &ListPortfolioUsersResponse{Request: request}
 
-	if err := core.HttpGet(
+	if err := client.HttpGet(
 		ctx,
 		s.client,
 		path,

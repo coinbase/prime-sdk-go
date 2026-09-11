@@ -50,7 +50,7 @@ func (s *onchainAddressBookServiceImpl) DeleteOnchainAddressBookEntry(
 
 	response := &DeleteOnchainAddressBookEntryResponse{Request: request}
 
-	if err := core.HttpDelete(
+	if err := client.HttpDelete(
 		ctx,
 		s.client,
 		path,

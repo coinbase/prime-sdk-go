@@ -56,7 +56,7 @@ func (s *transactionsServiceImpl) GetTransactionTravelRuleData(
 
 	response := &GetTransactionTravelRuleDataResponse{Request: request}
 
-	if err := core.HttpGet(
+	if err := client.HttpGet(
 		ctx,
 		s.client,
 		path,

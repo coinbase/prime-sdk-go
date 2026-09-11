@@ -48,7 +48,7 @@ func (s *allocationsServiceImpl) GetPortfolioAllocation(
 
 	response := &GetPortfolioAllocationResponse{Request: request}
 
-	if err := core.HttpGet(
+	if err := client.HttpGet(
 		ctx,
 		s.client,
 		path,

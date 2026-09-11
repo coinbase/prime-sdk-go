@@ -20,7 +20,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/coinbase/core-go"
 	"github.com/coinbase/prime-sdk-go/client"
 )
 
@@ -51,7 +50,7 @@ func (s *financingServiceImpl) CreateLocate(
 
 	response := &CreateLocateResponse{Request: request}
 
-	if err := core.HttpPost(
+	if err := client.HttpPost(
 		ctx,
 		s.client,
 		path,

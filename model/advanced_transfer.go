@@ -26,6 +26,7 @@ const (
 	AdvancedTransferStateCancelled  AdvancedTransferState = "ADVANCED_TRANSFER_STATE_CANCELLED"
 	AdvancedTransferStateFailed     AdvancedTransferState = "ADVANCED_TRANSFER_STATE_FAILED"
 	AdvancedTransferStateExpired    AdvancedTransferState = "ADVANCED_TRANSFER_STATE_EXPIRED"
+	AdvancedTransferStateRejected   AdvancedTransferState = "ADVANCED_TRANSFER_STATE_REJECTED"
 )
 
 // AdvancedTransferType specifies the type of advanced transfer.
@@ -80,4 +81,15 @@ type AdvancedTransfer struct {
 	State              AdvancedTransferState `json:"state,omitempty"`
 	FundMovements      []*FundMovement       `json:"fund_movements,omitempty"`
 	BlindMatchMetadata *BlindMatchMetadata   `json:"blind_match_metadata,omitempty"`
+
+	// Coinbase fees charged to this portfolio's wallets on this Advanced Transfer.
+	// Empty on create and when no fees apply.
+	CoinbaseFees []*CoinbaseFee `json:"coinbase_fees,omitempty"`
+}
+
+// CoinbaseFee is a Coinbase fee charged to a wallet.
+type CoinbaseFee struct {
+	Amount   string `json:"amount,omitempty"`
+	Symbol   string `json:"symbol,omitempty"`
+	WalletId string `json:"wallet_id,omitempty"`
 }

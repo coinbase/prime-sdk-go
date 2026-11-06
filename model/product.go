@@ -30,6 +30,7 @@ const (
 	ProductTypeSpot   ProductType = "SPOT"
 	ProductTypeFuture ProductType = "FUTURE"
 	ProductTypeOption ProductType = "OPTION"
+	ProductTypeBasis  ProductType = "BASIS"
 )
 
 // ContractExpiryType represents the expiry type of a futures contract.

@@ -308,3 +308,9 @@ const SubcodeOrderQuoteDurationInvalid Subcode = "ORDER_QUOTE_DURATION_INVALID"
 // Size-in-quote RFQ requests are not enabled for this portfolio.
 // HTTP status: 403. Error code: PERMISSION_DENIED.
 const SubcodeOrderRfqSiqNotEnabled Subcode = "ORDER_RFQ_SIQ_NOT_ENABLED"
+
+// SubcodeOrderSpreadNotEnabled is the subcode ORDER_SPREAD_NOT_ENABLED.
+//
+// SPREAD orders are not enabled for this portfolio.
+// HTTP status: 400. Error code: VALIDATION_ERROR.
+const SubcodeOrderSpreadNotEnabled Subcode = "ORDER_SPREAD_NOT_ENABLED"

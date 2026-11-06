@@ -28,11 +28,16 @@ import (
 type CreateAdvancedTransferRequest struct {
 	PortfolioId      string                  `json:"-"`
 	AdvancedTransfer *model.AdvancedTransfer `json:"advanced_transfer"`
+
+	// Optional client-generated idempotency key. A request with the same key returns the stored
+	// transaction ID and reports CREATED; the request body is not compared. Omit it to create a
+	// new transfer.
+	IdempotencyKey string `json:"idempotency_key,omitempty"`
 }
 
 type CreateAdvancedTransferResponse struct {
-	AdvancedTransfer *model.AdvancedTransfer         `json:"advanced_transfer"`
-	Request          *CreateAdvancedTransferRequest  `json:"-"`
+	AdvancedTransfer *model.AdvancedTransfer        `json:"advanced_transfer"`
+	Request          *CreateAdvancedTransferRequest `json:"-"`
 }
 
 func (s *advancedTransfersServiceImpl) CreateAdvancedTransfer(

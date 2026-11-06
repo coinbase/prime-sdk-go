@@ -33,13 +33,16 @@ const (
 	WalletTypeTrading = "TRADING"
 	WalletTypeOnchain = "ONCHAIN"
 	WalletTypeOther   = "WALLET_TYPE_OTHER"
+
+	WalletTypeInternationalDerivatives = "INTERNATIONAL_DERIVATIVES"
 )
 
 // Wallet deposit type constants
 const (
-	WalletDepositTypeWire   = "WIRE"
-	WalletDepositTypeSwift  = "SWIFT"
-	WalletDepositTypeCrypto = "CRYPTO"
+	WalletDepositTypeWire    = "WIRE"
+	WalletDepositTypeSwift   = "SWIFT"
+	WalletDepositTypeCrypto  = "CRYPTO"
+	WalletDepositTypeKinexys = "KINEXYS"
 )
 
 // Wallet represents a Prime wallet

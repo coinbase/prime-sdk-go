@@ -37,6 +37,7 @@
 - **`AdvancedTransfer`**, **`Transaction`**: Added `coinbase_fees`
 - **`CoinbaseFee`**: New type (`amount`, `symbol`, `wallet_id`)
 - **`OnchainDetail`**: Added `original_unsigned_transaction`
+- **`WebhookUpdateMask`**: `UpdateWebhookSubscriptionRequest.UpdateMask` takes `&model.WebhookUpdateMask{Paths: []string{"target_url"}}` (snake_case field names). The live API decodes the mask as an object, not the string shown in the OpenAPI spec.
 - **`CreateAdvancedTransferRequest`**: Added optional `IdempotencyKey`
 - **`CreateQuoteRequest`** / **`CreateQuoteResponse`**: Added `IsBuyExact` / `is_buy_exact`
 

@@ -181,7 +181,7 @@ func TestUpdateWebhookSubscription(t *testing.T) {
 		PortfolioId:     "p1",
 		SubscriptionId:  "s1",
 		IsEnabled:       &disabled,
-		UpdateMask:      "is_enabled",
+		UpdateMask:      &model.WebhookUpdateMask{Paths: []string{"is_enabled"}},
 		ExpectedVersion: "3",
 	})
 	if err != nil {
@@ -196,8 +196,17 @@ func TestUpdateWebhookSubscription(t *testing.T) {
 	if v, ok := body["is_enabled"]; !ok || v != false {
 		t.Errorf("is_enabled=false must be sent explicitly, body: %s", got.body)
 	}
-	if body["update_mask"] != "is_enabled" || body["expected_version"] != "3" {
+	if body["expected_version"] != "3" {
 		t.Errorf("unexpected body: %s", got.body)
+	}
+	// The live API expects update_mask as {"paths": [...]}, not a string.
+	mask, ok := body["update_mask"].(map[string]any)
+	if !ok {
+		t.Fatalf("update_mask must be an object, body: %s", got.body)
+	}
+	paths, _ := mask["paths"].([]any)
+	if len(paths) != 1 || paths[0] != "is_enabled" {
+		t.Errorf("unexpected update_mask paths: %s", got.body)
 	}
 }
 

@@ -25,6 +25,7 @@ import (
 
 	"github.com/coinbase/prime-sdk-go/client"
 	"github.com/coinbase/prime-sdk-go/credentials"
+	"github.com/coinbase/prime-sdk-go/model"
 	"github.com/coinbase/prime-sdk-go/webhooks"
 )
 
@@ -45,10 +46,10 @@ func main() {
 	svc := webhooks.NewWebhooksService(restClient)
 
 	if len(os.Args) < 3 {
-		log.Fatalf("usage: go run ./examples/webhooks/updateWebhookSubscription <subscription_id> <description>")
+		log.Fatalf("usage: go run ./examples/webhooks/updateWebhookSubscription <subscription_id> <target_url>")
 	}
 	subscriptionId := os.Args[1]
-	description := os.Args[2]
+	targetUrl := os.Args[2]
 
 	// Read the current version so the update is rejected if the subscription changed in the meantime.
 	current, err := svc.GetWebhookSubscription(context.Background(), &webhooks.GetWebhookSubscriptionRequest{
@@ -62,8 +63,8 @@ func main() {
 	request := &webhooks.UpdateWebhookSubscriptionRequest{
 		PortfolioId:     credentials.PortfolioId,
 		SubscriptionId:  subscriptionId,
-		Description:     description,
-		UpdateMask:      "description",
+		TargetUrl:       targetUrl,
+		UpdateMask:      &model.WebhookUpdateMask{Paths: []string{"target_url"}},
 		ExpectedVersion: current.Subscription.Version,
 	}
 

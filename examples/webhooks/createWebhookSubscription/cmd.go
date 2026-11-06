@@ -46,21 +46,17 @@ func main() {
 
 	svc := webhooks.NewWebhooksService(restClient)
 
-	// Required: WEBHOOK_TARGET_URL (HTTPS endpoint that will receive events) and
-	// WEBHOOK_EVENT_TYPES (comma-separated names from the getWebhookEventTypes example).
-	// Optional: WEBHOOK_DESCRIPTION.
-	targetUrl := os.Getenv("WEBHOOK_TARGET_URL")
-	eventTypes := os.Getenv("WEBHOOK_EVENT_TYPES")
-	if targetUrl == "" || eventTypes == "" {
-		log.Fatalf("WEBHOOK_TARGET_URL and WEBHOOK_EVENT_TYPES environment variables are required")
+	if len(os.Args) < 3 {
+		log.Fatalf("usage: go run ./examples/webhooks/createWebhookSubscription <event_types> <target_url>")
 	}
+	eventTypes := os.Args[1]
+	targetUrl := os.Args[2]
 
 	request := &webhooks.CreateWebhookSubscriptionRequest{
 		PortfolioId: credentials.PortfolioId,
 		EventTypes:  strings.Split(eventTypes, ","),
 		TargetUrl:   targetUrl,
 		AuthType:    model.WebhookAuthTypeHmac,
-		Description: os.Getenv("WEBHOOK_DESCRIPTION"),
 	}
 
 	response, err := svc.CreateWebhookSubscription(context.Background(), request)

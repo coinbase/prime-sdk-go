@@ -39,8 +39,9 @@ type UpdateWebhookSubscriptionRequest struct {
 	// IsEnabled is a pointer so that false can be sent explicitly.
 	IsEnabled *bool `json:"is_enabled,omitempty"`
 
-	// UpdateMask lists the fields to update (field-mask paths).
-	UpdateMask string `json:"update_mask,omitempty"`
+	// UpdateMask lists the fields to update, for example
+	// &model.WebhookUpdateMask{Paths: []string{"target_url"}}. Use snake_case field names.
+	UpdateMask *model.WebhookUpdateMask `json:"update_mask,omitempty"`
 
 	// ExpectedVersion is the subscription Version the update is based on (optimistic concurrency).
 	ExpectedVersion string `json:"expected_version,omitempty"`

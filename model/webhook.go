@@ -66,6 +66,15 @@ const (
 	WebhookStatsPeriod30d WebhookStatsPeriod = "WEBHOOK_STATS_PERIOD_30D"
 )
 
+// WebhookUpdateMask selects which fields an update applies to.
+//
+// The live Prime API decodes update_mask as an object with a paths array of snake_case field names,
+// not the plain string shown in the OpenAPI spec. Supported paths: event_types, target_url,
+// auth_type, oauth_config, custom_headers, description, is_enabled.
+type WebhookUpdateMask struct {
+	Paths []string `json:"paths"`
+}
+
 // WebhookOAuthConfigInput is the OAuth client configuration supplied when creating or updating a subscription.
 type WebhookOAuthConfigInput struct {
 	TokenUrl     string   `json:"token_url,omitempty"`

@@ -79,6 +79,7 @@ var domainPrefixes = []struct {
 	{"ACTIVITY_", "activity"},
 	{"ASSET_", "asset"},
 	{"COMMISSION_", "commission"},
+	{"WEBHOOK_", "webhook"},
 	{"AUTH_", "common"},
 	{"SERVER_", "common"},
 	{"MTLS_", "common"},

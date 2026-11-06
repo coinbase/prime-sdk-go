@@ -16,6 +16,14 @@
 
 package model
 
+// Payment method type constants (values added in the latest API spec).
+const (
+	PaymentMethodTypeJpmKinexys = "METHOD_JPM_KINEXYS"
+	PaymentMethodTypePix        = "METHOD_PIX"
+	PaymentMethodTypeSepa       = "METHOD_SEPA"
+	PaymentMethodTypeCbit       = "METHOD_CBIT"
+)
+
 // EntityPaymentMethod represents a payment method for an entity
 type EntityPaymentMethod struct {
 	Id                string `json:"id"`

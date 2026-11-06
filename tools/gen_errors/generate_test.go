@@ -83,6 +83,7 @@ func TestDomainForSubcode(t *testing.T) {
 		"ONCHAIN_TRANSACTION_REQUEST_INVALID": "onchain",
 		"FCM_EQUITY_NOT_FOUND":                "futures",
 		"AUTH_UNAUTHENTICATED":                "common",
+		"WEBHOOK_SUBSCRIPTION_NOT_FOUND":      "webhook",
 	}
 	for name, want := range cases {
 		got, err := domainForSubcode(name)

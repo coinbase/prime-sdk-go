@@ -860,6 +860,107 @@ type TierPairRateEntry struct {
 	TierA string `json:"tier_a,omitempty"`
 	TierB string `json:"tier_b,omitempty"`
 	Rate  string `json:"rate,omitempty"`
+
+	// Signed cash adjustment associated with the short collateral balance in a historical margin summary
+	ShortCollateralTransfer string `json:"short_collateral_transfer,omitempty"`
+
+	HealthStatus     MarginHealthStatus    `json:"health_status,omitempty"`
+	MarginLevel      MarginLevel           `json:"margin_level,omitempty"`
+	MarginThresholds *MarginCallThresholds `json:"margin_thresholds,omitempty"`
+	ControlStatus    MarginControlStatus   `json:"control_status,omitempty"`
+
+	// Account equity divided by margin requirement, as a decimal ratio
+	EquityRatio string `json:"equity_ratio,omitempty"`
+
+	// Margin deficit divided by the account's margin limit
+	DeficitRatio string `json:"deficit_ratio,omitempty"`
+
+	CallStatus MarginEntityCallStatus `json:"call_status,omitempty"`
+}
+
+// MarginHealthStatus is the health status of an entity's margin account.
+type MarginHealthStatus string
+
+const (
+	MarginHealthStatusHealthy        MarginHealthStatus = "MARGIN_HEALTH_STATUS_HEALTHY"
+	MarginHealthStatusWarning        MarginHealthStatus = "MARGIN_HEALTH_STATUS_WARNING"
+	MarginHealthStatusCritical       MarginHealthStatus = "MARGIN_HEALTH_STATUS_CRITICAL"
+	MarginHealthStatusSuspended      MarginHealthStatus = "MARGIN_HEALTH_STATUS_SUSPENDED"
+	MarginHealthStatusRestricted     MarginHealthStatus = "MARGIN_HEALTH_STATUS_RESTRICTED"
+	MarginHealthStatusPreLiquidation MarginHealthStatus = "MARGIN_HEALTH_STATUS_PRE_LIQUIDATION"
+	MarginHealthStatusLiquidating    MarginHealthStatus = "MARGIN_HEALTH_STATUS_LIQUIDATING"
+	MarginHealthStatusInDeficit      MarginHealthStatus = "MARGIN_HEALTH_STATUS_IN_DEFICIT"
+)
+
+// MarginLevel is the margin level of an entity's margin account.
+type MarginLevel string
+
+const (
+	MarginLevelHealthy     MarginLevel = "MARGIN_LEVEL_HEALTHY"
+	MarginLevelDeficit     MarginLevel = "MARGIN_LEVEL_DEFICIT"
+	MarginLevelWarning     MarginLevel = "MARGIN_LEVEL_WARNING"
+	MarginLevelCritical    MarginLevel = "MARGIN_LEVEL_CRITICAL"
+	MarginLevelLiquidation MarginLevel = "MARGIN_LEVEL_LIQUIDATION"
+)
+
+// MarginControlStatus describes which actions are permitted for an entity's margin account.
+type MarginControlStatus string
+
+const (
+	MarginControlStatusTradesAndWithdrawals MarginControlStatus = "MARGIN_CONTROL_STATUS_TRADES_AND_WITHDRAWALS"
+	MarginControlStatusTradesOnly           MarginControlStatus = "MARGIN_CONTROL_STATUS_TRADES_ONLY"
+	MarginControlStatusSessionLocked        MarginControlStatus = "MARGIN_CONTROL_STATUS_SESSION_LOCKED"
+)
+
+// MarginEntityCallStatus is the margin call status of an entity.
+type MarginEntityCallStatus string
+
+const (
+	MarginEntityCallStatusNoCall           MarginEntityCallStatus = "MARGIN_ENTITY_CALL_STATUS_NO_CALL"
+	MarginEntityCallStatusOpenStandardCall MarginEntityCallStatus = "MARGIN_ENTITY_CALL_STATUS_OPEN_STANDARD_CALL"
+	MarginEntityCallStatusOpenUrgentCall   MarginEntityCallStatus = "MARGIN_ENTITY_CALL_STATUS_OPEN_URGENT_CALL"
+	MarginEntityCallStatusAgedCall         MarginEntityCallStatus = "MARGIN_ENTITY_CALL_STATUS_AGED_CALL"
+	MarginEntityCallStatusOpenDebitCall    MarginEntityCallStatus = "MARGIN_ENTITY_CALL_STATUS_OPEN_DEBIT_CALL"
+)
+
+// MarginThresholdType is the ratio type used to evaluate a margin threshold.
+type MarginThresholdType string
+
+const (
+	MarginThresholdTypeEquityRatio  MarginThresholdType = "MARGIN_THRESHOLD_TYPE_EQUITY_RATIO"
+	MarginThresholdTypeDeficitRatio MarginThresholdType = "MARGIN_THRESHOLD_TYPE_DEFICIT_RATIO"
+	MarginThresholdTypeNone         MarginThresholdType = "MARGIN_THRESHOLD_TYPE_NONE"
+)
+
+// MarginThreshold pairs a margin level with a threshold type and value.
+type MarginThreshold struct {
+	MarginLevel    MarginLevel         `json:"margin_level,omitempty"`
+	ThresholdType  MarginThresholdType `json:"threshold_type,omitempty"`
+	ThresholdValue string              `json:"threshold_value,omitempty"`
+}
+
+// MarginCallThresholds holds the thresholds that define each margin level boundary.
+type MarginCallThresholds struct {
+	MarginThresholds []*MarginThreshold `json:"margin_thresholds,omitempty"`
+}
+
+// PrimeXMAssetClass is the asset class of a Prime XM position.
+type PrimeXMAssetClass string
+
+const (
+	PrimeXMAssetClassUnspecified PrimeXMAssetClass = "PRIME_XM_ASSET_CLASS_UNSPECIFIED"
+	PrimeXMAssetClassCash        PrimeXMAssetClass = "PRIME_XM_ASSET_CLASS_CASH"
+	PrimeXMAssetClassFx          PrimeXMAssetClass = "PRIME_XM_ASSET_CLASS_FX"
+	PrimeXMAssetClassStablecoin  PrimeXMAssetClass = "PRIME_XM_ASSET_CLASS_STABLECOIN"
+	PrimeXMAssetClassCrypto      PrimeXMAssetClass = "PRIME_XM_ASSET_CLASS_CRYPTO"
+)
+
+// CrossMarginPrimeSpotMarginContribution breaks down the spot margin contribution of a position.
+type CrossMarginPrimeSpotMarginContribution struct {
+	RawNotional        string `json:"raw_notional,omitempty"`
+	IneligibleNotional string `json:"ineligible_notional,omitempty"`
+	HaircutNotional    string `json:"haircut_notional,omitempty"`
+	EquityContribution string `json:"equity_contribution,omitempty"`
 }
 
 // CrossMarginPrimeMarginSummary is the cross-margin account summary returned by
@@ -887,6 +988,12 @@ type CrossMarginPrimeMarginSummary struct {
 	DeficitRatio               string                                      `json:"deficit_ratio,omitempty"`
 	MarginThresholds           *PrimeXMMarginCallThresholds                `json:"margin_thresholds,omitempty"`
 	FcmExcessAvailableToReturn string                                      `json:"fcm_excess_available_to_return,omitempty"`
+
+	// Total account equity in USD after pending withdrawals, before collateral caps and cash-equivalent haircuts
+	RawAccountEquity string `json:"raw_account_equity,omitempty"`
+
+	// Total account equity in USD after pending withdrawals and collateral caps, before cash-equivalent haircuts
+	PreHaircutAccountEquity string `json:"pre_haircut_account_equity,omitempty"`
 }
 
 // CrossMarginPrimeSpotEquityBreakdown breaks down the components of spot equity.
@@ -896,6 +1003,12 @@ type CrossMarginPrimeSpotEquityBreakdown struct {
 	ShortMarketValue string `json:"short_market_value,omitempty"`
 	ShortCollateral  string `json:"short_collateral,omitempty"`
 	PendingTransfers string `json:"pending_transfers,omitempty"`
+
+	// Equity contribution from FX positions
+	FxBalance string `json:"fx_balance,omitempty"`
+
+	// Equity contribution from non-USDC stablecoins (USDC is included in cash_balance)
+	StablecoinBalance string `json:"stablecoin_balance,omitempty"`
 }
 
 // CrossMarginPrimeDerivativesEquityBreakdown breaks down the components of
@@ -959,6 +1072,9 @@ type CrossMarginPrimeXMPosition struct {
 	ShortAmount            string `json:"short_amount,omitempty"`
 	VolatilityAddon        string `json:"volatility_addon,omitempty"`
 	LiquidityAddon         string `json:"liquidity_addon,omitempty"`
+
+	AssetClass             PrimeXMAssetClass                       `json:"asset_class,omitempty"`
+	SpotMarginContribution *CrossMarginPrimeSpotMarginContribution `json:"spot_margin_contribution,omitempty"`
 }
 
 // PrimeXMMarginCallThresholds holds the threshold values that define each

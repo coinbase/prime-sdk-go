@@ -26,15 +26,20 @@ import (
 )
 
 type CreateQuoteRequest struct {
-	PortfolioId    string          `json:"portfolio_id"`
-	ProductId      string          `json:"product_id"`
-	Side           model.OrderSide `json:"side"`
-	ClientQuoteId  string          `json:"client_quote_id"`
-	BaseQuantity   string          `json:"base_quantity,omitempty"`
-	QuoteValue     string          `json:"quote_value,omitempty"`
-	LimitPrice     string          `json:"limit_price"`
-	SettleCurrency string          `json:"settl_currency,omitempty"`
-	QuoteDurationMs string `json:"quote_duration_ms,omitempty"`
+	PortfolioId     string          `json:"portfolio_id"`
+	ProductId       string          `json:"product_id"`
+	Side            model.OrderSide `json:"side"`
+	ClientQuoteId   string          `json:"client_quote_id"`
+	BaseQuantity    string          `json:"base_quantity,omitempty"`
+	QuoteValue      string          `json:"quote_value,omitempty"`
+	LimitPrice      string          `json:"limit_price"`
+	SettleCurrency  string          `json:"settl_currency,omitempty"`
+	QuoteDurationMs string          `json:"quote_duration_ms,omitempty"`
+
+	// Buy Exact flag. When true, fees for a BUY RFQ sized in quote_value are charged on top of the
+	// requested quote_value instead of being carved out of it. Only valid for BUY RFQs sized in
+	// quote_value on SPOT products.
+	IsBuyExact bool `json:"is_buy_exact,omitempty"`
 }
 
 type CreateQuoteResponse struct {
@@ -43,8 +48,9 @@ type CreateQuoteResponse struct {
 	BestPrice            string              `json:"best_price"`
 	OrderTotal           string              `json:"order_total"`
 	PriceInclusiveOfFees string              `json:"price_inclusive_of_fees"`
-	QuoteDurationMs string              `json:"quote_duration_ms,omitempty"`
-	Request         *CreateQuoteRequest `json:"-"`
+	QuoteDurationMs      string              `json:"quote_duration_ms,omitempty"`
+	IsBuyExact           bool                `json:"is_buy_exact,omitempty"`
+	Request              *CreateQuoteRequest `json:"-"`
 }
 
 func (s *ordersServiceImpl) CreateQuoteRequest(ctx context.Context, request *CreateQuoteRequest) (*CreateQuoteResponse, error) {

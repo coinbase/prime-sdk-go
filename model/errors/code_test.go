@@ -22,8 +22,8 @@ func TestMetadataCompleteness(t *testing.T) {
 	if len(errorCodeInfo) != 10 {
 		t.Fatalf("errorCodeInfo size %d, want 10", len(errorCodeInfo))
 	}
-	if len(subcodeInfo) != 287 {
-		t.Fatalf("subcodeInfo size %d, want 287", len(subcodeInfo))
+	if len(subcodeInfo) != 298 {
+		t.Fatalf("subcodeInfo size %d, want 298", len(subcodeInfo))
 	}
 
 	codes := []ErrorCode{

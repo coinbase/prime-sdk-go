@@ -51,6 +51,20 @@ service := portfolios.NewPortfoliosService(client)
 response, err := service.ListPortfolios(ctx, &portfolios.ListPortfoliosRequest{})
 ```
 
+## Webhooks (beta)
+
+The [`webhooks`](webhooks) service manages webhook subscriptions, delivery logs, simulations, replays, and statistics. Runnable samples for every endpoint are in [`examples/webhooks`](examples/webhooks):
+
+```
+service := webhooks.NewWebhooksService(client)
+
+response, err := service.ListWebhookSubscriptions(ctx, &webhooks.ListWebhookSubscriptionsRequest{
+    PortfolioId: portfolioId,
+})
+```
+
+The HMAC secret returned by `CreateWebhookSubscription` and `RotateWebhookHmacSecret` is only shown once. Store it in a secret manager and do not log it.
+
 ## Error handling
 
 HTTP error responses from the Prime REST API include `code`, `message`, `subcode`, and `trace_id`. Service methods return these as `*errors.ApiError` from [`model/errors`](model/errors). Typed constants are generated from the OpenAPI `x-error-codes` and `x-subcodes` lists (hover a constant in an IDE to see its spec description).

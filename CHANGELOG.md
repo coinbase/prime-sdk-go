@@ -1,5 +1,57 @@
 # Changelog
 
+## [0.13.0] - 2026-NOV-06
+
+### Added
+
+#### New API Endpoints
+
+**Webhooks Service** (beta, new `webhooks` package)
+- **`GetWebhookEventTypes`**: List the event types that can be subscribed to (`GET /webhooks/event-types`)
+- **`ListWebhookSubscriptions`**: List webhook subscriptions for a portfolio (`GET /portfolios/{portfolio_id}/webhooks/subscriptions`)
+- **`CreateWebhookSubscription`**: Create a webhook subscription (`POST /portfolios/{portfolio_id}/webhooks/subscriptions`)
+- **`GetWebhookSubscription`**: Get a webhook subscription (`GET /portfolios/{portfolio_id}/webhooks/subscriptions/{subscription_id}`)
+- **`UpdateWebhookSubscription`**: Update a webhook subscription (`PATCH /portfolios/{portfolio_id}/webhooks/subscriptions/{subscription_id}`)
+- **`DeleteWebhookSubscription`**: Delete a webhook subscription (`DELETE /portfolios/{portfolio_id}/webhooks/subscriptions/{subscription_id}`)
+- **`RotateWebhookHmacSecret`**: Rotate a subscription's HMAC secret (`POST /portfolios/{portfolio_id}/webhooks/subscriptions/{subscription_id}/rotate-hmac-secret`)
+- **`SendWebhookSimulation`**: Send a simulated event to a subscription (`POST /portfolios/{portfolio_id}/webhooks/subscriptions/{subscription_id}/simulate`)
+- **`GetWebhookDeliveryLogs`**: List delivery log entries for a subscription (`GET /portfolios/{portfolio_id}/webhooks/subscriptions/{subscription_id}/deliveries`)
+- **`GetWebhookDeliveryAttempts`**: List delivery attempts for an event (`GET /portfolios/{portfolio_id}/webhooks/subscriptions/{subscription_id}/deliveries/{event_id}/attempts`)
+- **`GetWebhookSubscriptionStats`**: Get delivery statistics for a subscription (`GET /portfolios/{portfolio_id}/webhooks/subscriptions/{subscription_id}/stats`)
+- **`GetWebhookOwnerStats`**: Get webhook statistics for a portfolio (`GET /portfolios/{portfolio_id}/webhooks/stats`)
+- **`ReplayWebhookEvent`**: Replay a webhook event (`POST /portfolios/{portfolio_id}/webhooks/events/{event_id}/replay`)
+
+- **`examples/webhooks`**: One runnable example per webhook endpoint
+
+#### New & Updated Models
+
+- **`WebhookSubscription`**, **`WebhookOAuthConfig`**, **`WebhookOAuthConfigInput`**, **`WebhookEventType`**, **`WebhookDeliveryLogEntry`**, **`WebhookDeliveryAttempt`**, **`WebhookEventTypeStats`**, **`WebhookRecentFailure`**, **`WebhookSubscriptionSummary`**: Webhook types
+- **`Order`**: Added `limit_price_type`, `spread_config`, `spread_details`, `option_greeks`, `spread_preview`, `settl_currency`, and current/projected margin utilization (and ratio) preview fields
+- **`Leg`**, **`SpreadConfig`**, **`SpreadDetails`**, **`SpreadLegDetails`**, **`SpreadPreview`**, **`LegPreview`**, **`OptionGreeks`**: SPREAD order and option preview types
+- **`MarginSummary`**: Added `short_collateral_transfer`, `health_status`, `margin_level`, `margin_thresholds`, `control_status`, `equity_ratio`, `deficit_ratio`, `call_status`
+- **`MarginThreshold`**, **`MarginCallThresholds`**, **`CrossMarginPrimeSpotMarginContribution`**: New margin types
+- **`CrossMarginPrimeMarginSummary`**: Added `raw_account_equity`, `pre_haircut_account_equity`
+- **`CrossMarginPrimeSpotEquityBreakdown`**: Added `fx_balance`, `stablecoin_balance`
+- **`CrossMarginPrimeXMPosition`**: Added `asset_class`, `spot_margin_contribution`
+- **`FcmPosition`**, **`DerivativePosition`**: Added `funding_pnl`
+- **`AdvancedTransfer`**, **`Transaction`**: Added `coinbase_fees`
+- **`CoinbaseFee`**: New type (`amount`, `symbol`, `wallet_id`)
+- **`OnchainDetail`**: Added `original_unsigned_transaction`
+- **`WebhookUpdateMask`**: `UpdateWebhookSubscriptionRequest.UpdateMask` takes `&model.WebhookUpdateMask{Paths: []string{"target_url"}}` (snake_case field names). The live API decodes the mask as an object, not the string shown in the OpenAPI spec.
+- **`CreateAdvancedTransferRequest`**: Added optional `IdempotencyKey`
+- **`CreateQuoteRequest`** / **`CreateQuoteResponse`**: Added `IsBuyExact` / `is_buy_exact`
+
+#### New Enums
+
+- **`WebhookAuthType`**, **`WebhookDeliveryStatus`**, **`WebhookHealthStatus`**, **`WebhookErrorType`**, **`WebhookStatsPeriod`**
+- **`LimitPriceType`**, **`SpreadLimitType`**, **`MaxDeltaType`**
+- **`MarginHealthStatus`**, **`MarginLevel`**, **`MarginControlStatus`**, **`MarginEntityCallStatus`**, **`MarginThresholdType`**, **`PrimeXMAssetClass`**
+- New values: `OrderSide` `MULTIPLE`; order type `SPREAD`; `AdvancedTransferState` `REJECTED`; `ProductType` `BASIS`; `RewardSubtype` `TRADING_FEE_REBATE_REWARD`; wallet type `INTERNATIONAL_DERIVATIVES`; wallet deposit type `KINEXYS`; payment method types `METHOD_JPM_KINEXYS`, `METHOD_PIX`, `METHOD_SEPA`, `METHOD_CBIT`
+
+### Changed
+
+- `model/errors`: Added `WEBHOOK_*` subcodes and `ORDER_SPREAD_NOT_ENABLED`; `tools/gen_errors` maps `WEBHOOK_` subcodes to `subcode_webhook_gen.go`
+
 ## [0.12.0] - 2026-SEP-08
 
 ### Added

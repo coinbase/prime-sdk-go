@@ -24,6 +24,7 @@ const (
 	OrderTypeLimit  = "LIMIT"
 	OrderTypeTwap   = "TWAP"
 	OrderTypeBlock  = "BLOCK"
+	OrderTypeSpread = "SPREAD"
 )
 
 // Time in force constants
@@ -40,6 +41,9 @@ const (
 	OrderSideBuy     OrderSide = "BUY"
 	OrderSideSell    OrderSide = "SELL"
 	OrderSideUnknown OrderSide = "UNKNOWN_ORDER_SIDE"
+
+	// OrderSideMultiple is response-only: a SPREAD order whose legs carry their own sides.
+	OrderSideMultiple OrderSide = "MULTIPLE"
 )
 
 // Order represents a Prime order
@@ -53,12 +57,14 @@ type Order struct {
 	ProductId     string `json:"product_id"`
 	Type          string `json:"type"`
 
-	// Order size in base asset units (either `base_quantity` or `quote_value` is required)
+	// Order size in base asset units (either `base_quantity` or `quote_value` is required).
+	// For SPREAD orders, required and in the primary leg's units: a whole number of contracts
+	// when it is a futures product.
 	BaseQuantity string `json:"base_quantity"`
 
 	// Order size in quote asset units, i.e. the amount the user wants to spend (when buying) or receive (when selling);
 	// the quantity in base units will be determined based on the market liquidity and indicated `quote_value` (either
-	// `base_quantity` or `quote_value` is required)
+	// `base_quantity` or `quote_value` is required). Not supported for SPREAD orders.
 	QuoteValue string `json:"quote_value,omitempty"`
 
 	LimitPrice string `json:"limit_price,omitempty"`
@@ -118,6 +124,128 @@ type Order struct {
 	WigLevel              string                 `json:"wig_level,omitempty"`
 	ProductType           ProductType            `json:"product_type,omitempty"`
 	CommissionDetailTotal *CommissionDetailTotal `json:"commission_detail_total,omitempty"`
+
+	// How limit_price is expressed (SPREAD and option orders)
+	LimitPriceType LimitPriceType `json:"limit_price_type,omitempty"`
+
+	// Request only: configuration of the two legs of a SPREAD order
+	SpreadConfig *SpreadConfig `json:"spread_config,omitempty"`
+
+	// Response only: details of a SPREAD order, including per-leg fills
+	SpreadDetails *SpreadDetails `json:"spread_details,omitempty"`
+
+	// Order preview only
+	OptionGreeks  *OptionGreeks  `json:"option_greeks,omitempty"`
+	SpreadPreview *SpreadPreview `json:"spread_preview,omitempty"`
+
+	// Futures and SPREAD order previews only: derivatives margin limit usage before and after the order
+	CurrentMarginUtilization        string `json:"current_margin_utilization,omitempty"`
+	CurrentMarginUtilizationRatio   string `json:"current_margin_utilization_ratio,omitempty"`
+	ProjectedMarginUtilization      string `json:"projected_margin_utilization,omitempty"`
+	ProjectedMarginUtilizationRatio string `json:"projected_margin_utilization_ratio,omitempty"`
+
+	// The requested settlement currency, echoed on order previews
+	SettlCurrency string `json:"settl_currency,omitempty"`
+}
+
+// LimitPriceType describes how a limit price is expressed.
+type LimitPriceType string
+
+const (
+	LimitPriceTypeBaseAsset         LimitPriceType = "LIMIT_PRICE_TYPE_BASE_ASSET"
+	LimitPriceTypeQuoteAsset        LimitPriceType = "LIMIT_PRICE_TYPE_QUOTE_ASSET"
+	LimitPriceTypeImpliedVolatility LimitPriceType = "LIMIT_PRICE_TYPE_IMPLIED_VOLATILITY"
+)
+
+// SpreadLimitType is the unit of a SPREAD order limit.
+type SpreadLimitType string
+
+const (
+	SpreadLimitTypeBps SpreadLimitType = "SPREAD_LIMIT_TYPE_BPS"
+	SpreadLimitTypeUsd SpreadLimitType = "SPREAD_LIMIT_TYPE_USD"
+)
+
+// MaxDeltaType is the unit of a SPREAD order max delta size.
+type MaxDeltaType string
+
+const (
+	MaxDeltaTypeSpot     MaxDeltaType = "MAX_DELTA_TYPE_SPOT"
+	MaxDeltaTypePercent  MaxDeltaType = "MAX_DELTA_TYPE_PERCENT"
+	MaxDeltaTypeContract MaxDeltaType = "MAX_DELTA_TYPE_CONTRACT"
+)
+
+// Leg is a single leg of a SPREAD order request.
+type Leg struct {
+	ProductId           string    `json:"product_id,omitempty"`
+	Side                OrderSide `json:"side,omitempty"`
+	SupportPassiveOrder bool      `json:"support_passive_order,omitempty"`
+}
+
+// SpreadConfig configures a SPREAD order (request).
+type SpreadConfig struct {
+	Limit        string          `json:"limit,omitempty"`
+	LimitType    SpreadLimitType `json:"limit_type,omitempty"`
+	MaxDeltaSize string          `json:"max_delta_size,omitempty"`
+	MaxDeltaType MaxDeltaType    `json:"max_delta_type,omitempty"`
+	PrimaryLeg   *Leg            `json:"primary_leg,omitempty"`
+	SecondaryLeg *Leg            `json:"secondary_leg,omitempty"`
+}
+
+// SpreadLegDetails contains per-leg fill details of a SPREAD order (response).
+type SpreadLegDetails struct {
+	ProductId             string                 `json:"product_id,omitempty"`
+	Side                  OrderSide              `json:"side,omitempty"`
+	SupportPassiveOrder   bool                   `json:"support_passive_order,omitempty"`
+	FilledQuantity        string                 `json:"filled_quantity,omitempty"`
+	AverageFilledPrice    string                 `json:"average_filled_price,omitempty"`
+	Commission            string                 `json:"commission,omitempty"`
+	CommissionDetailTotal *CommissionDetailTotal `json:"commission_detail_total,omitempty"`
+	ExchangeFee           string                 `json:"exchange_fee,omitempty"`
+	FilledValue           string                 `json:"filled_value,omitempty"`
+}
+
+// SpreadDetails contains the details of a SPREAD order (response).
+type SpreadDetails struct {
+	Limit          string            `json:"limit,omitempty"`
+	LimitType      SpreadLimitType   `json:"limit_type,omitempty"`
+	MaxDeltaSize   string            `json:"max_delta_size,omitempty"`
+	MaxDeltaType   MaxDeltaType      `json:"max_delta_type,omitempty"`
+	GroupProductId string            `json:"group_product_id,omitempty"`
+	RealizedSpread string            `json:"realized_spread,omitempty"`
+	PrimaryLeg     *SpreadLegDetails `json:"primary_leg,omitempty"`
+	SecondaryLeg   *SpreadLegDetails `json:"secondary_leg,omitempty"`
+}
+
+// LegPreview contains the preview of a single leg of a SPREAD order.
+type LegPreview struct {
+	ProductId           string    `json:"product_id,omitempty"`
+	Side                OrderSide `json:"side,omitempty"`
+	SupportPassiveOrder bool      `json:"support_passive_order,omitempty"`
+	LegCommission       string    `json:"leg_commission,omitempty"`
+	QuoteValue          string    `json:"quote_value,omitempty"`
+	BestBid             string    `json:"best_bid,omitempty"`
+	BestAsk             string    `json:"best_ask,omitempty"`
+	AverageFilledPrice  string    `json:"average_filled_price,omitempty"`
+	Slippage            string    `json:"slippage,omitempty"`
+}
+
+// SpreadPreview contains the preview of a SPREAD order.
+type SpreadPreview struct {
+	Limit          string          `json:"limit,omitempty"`
+	LimitType      SpreadLimitType `json:"limit_type,omitempty"`
+	MaxDeltaSize   string          `json:"max_delta_size,omitempty"`
+	MaxDeltaType   MaxDeltaType    `json:"max_delta_type,omitempty"`
+	GroupProductId string          `json:"group_product_id,omitempty"`
+	PrimaryLeg     *LegPreview     `json:"primary_leg,omitempty"`
+	SecondaryLeg   *LegPreview     `json:"secondary_leg,omitempty"`
+}
+
+// OptionGreeks contains the greeks of an option order preview.
+type OptionGreeks struct {
+	Delta string `json:"delta,omitempty"`
+	Gamma string `json:"gamma,omitempty"`
+	Theta string `json:"theta,omitempty"`
+	Vega  string `json:"vega,omitempty"`
 }
 
 // CommissionDetailTotal contains a breakdown of all commission charges for an order or fill.

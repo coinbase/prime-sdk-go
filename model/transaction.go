@@ -102,14 +102,15 @@ type MatchMetadata struct {
 type RewardSubtype string
 
 const (
-	RewardSubtypeUnknown              RewardSubtype = "REWARD_SUBTYPE_UNKNOWN"
-	RewardSubtypeMEV                  RewardSubtype = "MEV_REWARD"
-	RewardSubtypeInflation            RewardSubtype = "INFLATION_REWARD"
-	RewardSubtypeBlock                RewardSubtype = "BLOCK_REWARD"
-	RewardSubtypeTransaction          RewardSubtype = "TRANSACTION_REWARD"
-	RewardSubtypeStakingFeeRebate     RewardSubtype = "STAKING_FEE_REBATE_REWARD"
-	RewardSubtypeBuidlDividend        RewardSubtype = "BUIDL_DIVIDEND"
-	RewardSubtypeCustomStablecoin     RewardSubtype = "CUSTOM_STABLECOIN_REWARD"
+	RewardSubtypeUnknown          RewardSubtype = "REWARD_SUBTYPE_UNKNOWN"
+	RewardSubtypeMEV              RewardSubtype = "MEV_REWARD"
+	RewardSubtypeInflation        RewardSubtype = "INFLATION_REWARD"
+	RewardSubtypeBlock            RewardSubtype = "BLOCK_REWARD"
+	RewardSubtypeTransaction      RewardSubtype = "TRANSACTION_REWARD"
+	RewardSubtypeStakingFeeRebate RewardSubtype = "STAKING_FEE_REBATE_REWARD"
+	RewardSubtypeBuidlDividend    RewardSubtype = "BUIDL_DIVIDEND"
+	RewardSubtypeCustomStablecoin RewardSubtype = "CUSTOM_STABLECOIN_REWARD"
+	RewardSubtypeTradingFeeRebate RewardSubtype = "TRADING_FEE_REBATE_REWARD"
 )
 
 // CustomStablecoinAsset contains currency metadata for a custom stablecoin reward program.
@@ -190,6 +191,9 @@ type OnchainDetail struct {
 	SkipBroadcast         bool            `json:"skip_broadcast"`
 	FailureReason         string          `json:"failure_reason"`
 	SigningStatus         string          `json:"signing_status"`
+
+	// The hex-encoded unsigned transaction exactly as submitted when the transaction was created
+	OriginalUnsignedTransaction string `json:"original_unsigned_transaction,omitempty"`
 }
 
 // Transfer represents a transfer from or to in a transaction
@@ -234,4 +238,5 @@ type Transaction struct {
 	Metadata              *TransactionMetadata  `json:"metadata,omitempty"`
 	IdempotencyKey        string                `json:"idempotency_key"`
 	OnchainDetails        *OnchainDetail        `json:"onchain_details,omitempty"`
+	CoinbaseFees          []*CoinbaseFee        `json:"coinbase_fees,omitempty"`
 }

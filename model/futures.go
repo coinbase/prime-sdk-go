@@ -104,6 +104,9 @@ type FcmPosition struct {
 	CurrentPrice      string `json:"current_price"`
 	AvgEntryPrice     string `json:"avg_entry_price"`
 	ExpirationTime    string `json:"expiration_time"`
+
+	// Funding PNL, populated only for perpetual futures positions
+	FundingPnl string `json:"funding_pnl,omitempty"`
 }
 
 // FcmPositionSide represents the side of an FCM or derivative position.
@@ -162,6 +165,9 @@ type DerivativePosition struct {
 	Currency          string                `json:"currency,omitempty"`
 	OptionsDetails    *OptionsDetails       `json:"options_details,omitempty"`
 	VenueId           string                `json:"venue_id,omitempty"`
+
+	// Funding PNL, populated only for perpetual futures positions
+	FundingPnl string `json:"funding_pnl,omitempty"`
 }
 
 // DerivativesCurrencyBalance contains balances for a single settlement currency

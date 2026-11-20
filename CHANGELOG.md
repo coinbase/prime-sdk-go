@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.14.1] - 2026-NOV-20
+
+### Fixed
+
+- Fixed a panic when signing `GetCrossMarginPrimeOverview` requests using the per-call `/v2` base URL.
+
 ## [0.14.0] - 2026-NOV-20
 
 ### Changed

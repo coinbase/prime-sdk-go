@@ -132,12 +132,12 @@ func NewRestClient(credentials *credentials.Credentials, httpClient http.Client)
 }
 
 func AddPrimeHeaders(req *http.Request, path string, body []byte, cl core.RestClient, t time.Time) {
-	c := cl.(*restClientImpl)
+	creds := cl.(RestClient).Credentials()
 	timestamp := strconv.FormatInt(t.Unix(), 10)
-	signature := sign(req.Method, path, timestamp, c.Credentials().SigningKey, string(body))
+	signature := sign(req.Method, path, timestamp, creds.SigningKey, string(body))
 	req.Header.Add("Accept", "application/json")
-	req.Header.Add("X-CB-ACCESS-KEY", c.Credentials().AccessKey)
-	req.Header.Add("X-CB-ACCESS-PASSPHRASE", c.Credentials().Passphrase)
+	req.Header.Add("X-CB-ACCESS-KEY", creds.AccessKey)
+	req.Header.Add("X-CB-ACCESS-PASSPHRASE", creds.Passphrase)
 	req.Header.Add("X-CB-ACCESS-SIGNATURE", signature)
 	req.Header.Add("X-CB-ACCESS-TIMESTAMP", timestamp)
 	req.Header.Set("User-Agent", fmt.Sprintf("prime-sdk-go/%s", sdkVersion))

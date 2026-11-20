@@ -169,6 +169,7 @@ const (
 type MaxDeltaType string
 
 const (
+	// MaxDeltaTypeSpot is an absolute size in spot base units and is not accepted for two-futures calendar spreads.
 	MaxDeltaTypeSpot     MaxDeltaType = "MAX_DELTA_TYPE_SPOT"
 	MaxDeltaTypePercent  MaxDeltaType = "MAX_DELTA_TYPE_PERCENT"
 	MaxDeltaTypeContract MaxDeltaType = "MAX_DELTA_TYPE_CONTRACT"

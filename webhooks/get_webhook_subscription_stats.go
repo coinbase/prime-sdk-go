@@ -39,6 +39,7 @@ type GetWebhookSubscriptionStatsResponse struct {
 	TotalEvents        string                              `json:"total_events"`
 	Successful         string                              `json:"successful"`
 	Failed             string                              `json:"failed"`
+	InProgress         string                              `json:"in_progress"`
 	SuccessRate        float64                             `json:"success_rate"`
 	AvgLatencyMs       string                              `json:"avg_latency_ms"`
 	P95LatencyMs       string                              `json:"p95_latency_ms"`

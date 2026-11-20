@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.14.0] - 2026-NOV-20
+
+### Changed
+
+- **Breaking:** Replace `model.WebhookAuthTypeHmac` (`WEBHOOK_AUTH_TYPE_HMAC`) with `model.WebhookAuthTypeSignatureOnly` (`WEBHOOK_AUTH_TYPE_SIGNATURE_ONLY`). This is the default when `auth_type` is omitted on create. HMAC signing is still available; Prime also signs every delivery with Ed25519.
+- Webhook delivery logs and attempts are retained for up to 30 days from the attempt timestamp.
+- Advanced transfer idempotency keys must be UUIDs when supplied. Reusing a key returns the stored transfer (ID, legs, and state), without comparing request bodies.
+- The List Products API now accepts limits up to 3000. Portfolio and wallet transaction filters accept `ONCHAIN_DEPOSIT`, `ONCHAIN_REWARD`, and `ONCHAIN_MESSAGE` as strings.
+
+### Added
+
+- Webhook subscription and per-event-type statistics now expose `in_progress`; per-event-type statistics also expose `failed`. Both are int64 values serialized as strings. Added `WebhookErrorTypeHttp3xx`, `WebhookErrorTypeInvalidEvent`, and `WebhookErrorTypeCanceled`.
+- Cross-margin positions now expose `spot_position_breakdown` with typed trading and vault balance legs.
+- Added the `AdvancedTransferStateMatched` state and the `ADVANCED_TRANSFER_IDEMPOTENCY_KEY_INVALID` API error subcode.
+
 ## [0.13.0] - 2026-NOV-06
 
 ### Added

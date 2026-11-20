@@ -1361,6 +1361,10 @@ tags:
     errorCode: REQUIRED_FIELD_MISSING
     httpStatus: 400
     description: One or more fund movements is missing its counterparty identifier.
+  - name: ADVANCED_TRANSFER_IDEMPOTENCY_KEY_INVALID
+    errorCode: VALIDATION_ERROR
+    httpStatus: 400
+    description: The idempotency_key field is present but is not a valid UUID.
   - name: ONCHAIN_TRANSACTION_REQUEST_INVALID
     errorCode: VALIDATION_ERROR
     httpStatus: 400
@@ -4509,7 +4513,10 @@ paths:
           type: string
       - name: state
         in: query
-        description: The state of the Advanced Transfer to filter by
+        description: |-
+          The state of the Advanced Transfer to filter by
+
+           - ADVANCED_TRANSFER_STATE_MATCHED: The counterparties have matched. Settlement has not started. Happy path is CREATED, MATCHED, PROCESSING, DONE.
         schema:
           type: string
           enum:
@@ -4520,6 +4527,7 @@ paths:
           - ADVANCED_TRANSFER_STATE_FAILED
           - ADVANCED_TRANSFER_STATE_EXPIRED
           - ADVANCED_TRANSFER_STATE_REJECTED
+          - ADVANCED_TRANSFER_STATE_MATCHED
       - name: type
         in: query
         description: The type of the Advanced Transfer to filter by
@@ -4638,10 +4646,10 @@ paths:
                   $ref: '#/components/schemas/coinbase.public_rest_api.AdvancedTransfer'
                 idempotency_key:
                   type: string
-                  description: Optional client-generated idempotency key. A request
-                    with the same key returns the stored transaction ID and reports
-                    CREATED; the request body is not compared. Omit the field to
-                    create a new transfer.
+                  description: "Optional client-generated idempotency key. When set,\
+                    \ it must be a UUID. A request with the same key returns the stored\
+                    \ transfer (id, legs, and state); the request body is not compared.\
+                    \ Omit the field to create a new transfer."
               description: CreateAdvancedTransferRequest is the request to create
                 an advanced transfer.
         required: true
@@ -4796,6 +4804,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/coinbase.public_rest_api.ListAdvancedTransferTransactionsResponse'
+        "400":
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/coinbase.public_rest_api.ListAdvancedTransferTransactionsBadRequestErrorResponse'
         "401":
           description: "Authentication failed. The request signature, key, or timestamp\
             \ is invalid."
@@ -7162,7 +7176,7 @@ paths:
       - name: limit
         in: query
         description: Number of items to retrieve. Must be between 0 (defaulted to
-          10) and 1000.
+          10) and 3000.
         schema:
           type: integer
           format: int32
@@ -7682,6 +7696,9 @@ paths:
            - PORTFOLIO_STAKE: Portfolio-level staking operation
            - PORTFOLIO_UNSTAKE: Portfolio-level unstaking operation
            - MERGE_STAKE: On-chain transaction consolidating funds from different addresses belonging to the same wallet.
+           - ONCHAIN_DEPOSIT: On-chain deposit detected into a Prime Onchain Wallet
+           - ONCHAIN_REWARD: Automated on-chain reward payout to a blockchain address
+           - ONCHAIN_MESSAGE: Message signing initiated with Prime Onchain Wallet; no funds move on-chain.
         style: form
         explode: true
         schema:
@@ -7725,6 +7742,9 @@ paths:
             - PORTFOLIO_STAKE
             - PORTFOLIO_UNSTAKE
             - MERGE_STAKE
+            - ONCHAIN_DEPOSIT
+            - ONCHAIN_REWARD
+            - ONCHAIN_MESSAGE
       - name: start_time
         in: query
         description: "UTC timestamp from which to filter the response (inclusive,\
@@ -9384,6 +9404,9 @@ paths:
            - PORTFOLIO_STAKE: Portfolio-level staking operation
            - PORTFOLIO_UNSTAKE: Portfolio-level unstaking operation
            - MERGE_STAKE: On-chain transaction consolidating funds from different addresses belonging to the same wallet.
+           - ONCHAIN_DEPOSIT: On-chain deposit detected into a Prime Onchain Wallet
+           - ONCHAIN_REWARD: Automated on-chain reward payout to a blockchain address
+           - ONCHAIN_MESSAGE: Message signing initiated with Prime Onchain Wallet; no funds move on-chain.
         style: form
         explode: true
         schema:
@@ -9427,6 +9450,9 @@ paths:
             - PORTFOLIO_STAKE
             - PORTFOLIO_UNSTAKE
             - MERGE_STAKE
+            - ONCHAIN_DEPOSIT
+            - ONCHAIN_REWARD
+            - ONCHAIN_MESSAGE
       - name: start_time
         in: query
         description: "UTC timestamp from which to filter the response (inclusive,\
@@ -10496,6 +10522,8 @@ paths:
       - Webhooks
       summary: Get Webhook Delivery Logs
       description: Returns cursor-paginated delivery logs for a single subscription.
+        Delivery history is retained for up to 30 days from each attempt's `attempted_at`
+        timestamp; older entries may be unavailable.
       operationId: PrimeBeta_GetWebhookDeliveryLogs
       parameters:
       - name: portfolio_id
@@ -10575,7 +10603,8 @@ paths:
       - Webhooks
       summary: Get Webhook Delivery Attempts
       description: "Returns all HTTP POST attempts for a specific (event_id, subscription_id)\
-        \ pair."
+        \ pair. Attempt history is retained for up to 30 days from each attempt's\
+        \ `attempted_at` timestamp; older records may be unavailable."
       operationId: PrimeBeta_GetWebhookDeliveryAttempts
       parameters:
       - name: portfolio_id
@@ -11415,8 +11444,10 @@ components:
         a blind match settlement.
     coinbase.public_rest_api.AdvancedTransferState:
       type: string
-      description: AdvancedTransferState represents the lifecycle state of an advanced
-        transfer.
+      description: |-
+        AdvancedTransferState represents the lifecycle state of an advanced transfer.
+
+         - ADVANCED_TRANSFER_STATE_MATCHED: The counterparties have matched. Settlement has not started. Happy path is CREATED, MATCHED, PROCESSING, DONE.
       enum:
       - ADVANCED_TRANSFER_STATE_CREATED
       - ADVANCED_TRANSFER_STATE_PROCESSING
@@ -11425,6 +11456,7 @@ components:
       - ADVANCED_TRANSFER_STATE_FAILED
       - ADVANCED_TRANSFER_STATE_EXPIRED
       - ADVANCED_TRANSFER_STATE_REJECTED
+      - ADVANCED_TRANSFER_STATE_MATCHED
     coinbase.public_rest_api.AdvancedTransferType:
       type: string
       description: AdvancedTransferType specifies the type of advanced transfer.
@@ -12321,6 +12353,22 @@ components:
             $ref: '#/components/schemas/coinbase.public_rest_api.XMLoan'
         active_liquidation:
           $ref: '#/components/schemas/coinbase.public_rest_api.ActiveLiquidationSummary'
+    coinbase.public_rest_api.CrossMarginPositionBreakdown:
+      type: object
+      properties:
+        position_type:
+          $ref: '#/components/schemas/coinbase.public_rest_api.XMPositionType'
+        balance:
+          type: string
+          description: "Signed balance of this leg in the position currency, after\
+            \ pending withdrawals and before collateral caps and haircuts."
+          example: "-0.19652944"
+        notional_balance:
+          type: string
+          description: "Signed USD notional of this leg, after pending withdrawals\
+            \ and before collateral caps and haircuts."
+          example: "-22508.85"
+      description: A single typed position leg of a per-asset XM row.
     coinbase.public_rest_api.CrossMarginPrimeDerivativesEquityBreakdown:
       type: object
       properties:
@@ -12596,6 +12644,12 @@ components:
           $ref: '#/components/schemas/coinbase.public_rest_api.PrimeXMAssetClass'
         spot_margin_contribution:
           $ref: '#/components/schemas/coinbase.public_rest_api.CrossMarginPrimeSpotMarginContribution'
+        spot_position_breakdown:
+          type: array
+          description: "Spot balance of this asset by position type. Contains SPOT_TRADING\
+            \ and SPOT_VAULT legs, which sum to spot_balance and spot_balance_notional."
+          items:
+            $ref: '#/components/schemas/coinbase.public_rest_api.CrossMarginPositionBreakdown'
       description: CrossMarginPrimeXMPosition is a single per-asset XM row (proto-backed
         fields from XMPositionDetails).
     coinbase.public_rest_api.CrossMarginRiskParameters:
@@ -14770,7 +14824,7 @@ components:
       type: string
       description: |-
         - UNKNOWN_MAX_DELTA_TYPE: nil value
-         - MAX_DELTA_TYPE_SPOT: Absolute size in spot base units
+         - MAX_DELTA_TYPE_SPOT: Absolute size in spot base units. Not accepted for a calendar spread (two futures).
          - MAX_DELTA_TYPE_PERCENT: Percentage of the order size
          - MAX_DELTA_TYPE_CONTRACT: Absolute number of futures contracts
       enum:
@@ -16879,6 +16933,9 @@ components:
          - PORTFOLIO_STAKE: Portfolio-level staking operation
          - PORTFOLIO_UNSTAKE: Portfolio-level unstaking operation
          - MERGE_STAKE: On-chain transaction consolidating funds from different addresses belonging to the same wallet.
+         - ONCHAIN_DEPOSIT: On-chain deposit detected into a Prime Onchain Wallet
+         - ONCHAIN_REWARD: Automated on-chain reward payout to a blockchain address
+         - ONCHAIN_MESSAGE: Message signing initiated with Prime Onchain Wallet; no funds move on-chain.
       enum:
       - DEPOSIT
       - WITHDRAWAL
@@ -16916,6 +16973,9 @@ components:
       - PORTFOLIO_STAKE
       - PORTFOLIO_UNSTAKE
       - MERGE_STAKE
+      - ONCHAIN_DEPOSIT
+      - ONCHAIN_REWARD
+      - ONCHAIN_MESSAGE
     coinbase.public_rest_api.TransactionValidator:
       required:
       - transaction_id
@@ -17812,6 +17872,17 @@ components:
         total_position_margin:
           type: string
           description: Total margin required
+    coinbase.public_rest_api.XMPositionType:
+      type: string
+      description: |-
+        Type of a position leg within a per-asset XM row. New values may be added as more legs are broken out.
+
+         - XM_POSITION_TYPE_UNSPECIFIED: The position type is unavailable, or is not recognized by this API version.
+         - XM_POSITION_TYPE_SPOT_TRADING: Spot balance held outside Prime Vault (trading balance, including Prime Loans).
+         - XM_POSITION_TYPE_SPOT_VAULT: Spot balance held in Prime Vault.
+      enum:
+      - XM_POSITION_TYPE_SPOT_TRADING
+      - XM_POSITION_TYPE_SPOT_VAULT
     coinbase.public_rest_api.XMRiskNettingInfo:
       type: object
       properties:
@@ -17970,10 +18041,21 @@ components:
         and its one-time HMAC secret.
     coinbase.public_rest_api.beta.WebhookAuthType:
       type: string
-      description: WebhookAuthType identifies the authentication method used to deliver
-        webhook events.
+      description: |-
+        WebhookAuthType is how Prime authenticates to your endpoint, on top of the
+        signatures. Every delivery is signed twice, whatever the auth type: with
+        HMAC-SHA256 in X-Coinbase-Signature, keyed by the subscription's
+        hmac_secret, and with Ed25519 in X-Coinbase-Signature-Ed25519, verifiable
+        with the public key named by X-Coinbase-Signature-Key-Id at
+        /.well-known/jwks.json. Verify either one.
+
+         - WEBHOOK_AUTH_TYPE_SIGNATURE_ONLY: Signatures only. Used when a subscription is created without auth_type.
+         - WEBHOOK_AUTH_TYPE_OAUTH: Signatures plus an OAuth 2.0 bearer token, fetched with oauth_config, in
+        the Authorization header.
+         - WEBHOOK_AUTH_TYPE_MTLS: Signatures plus a Coinbase client certificate (mutual TLS).
+         - WEBHOOK_AUTH_TYPE_OAUTH_MTLS: Signatures plus both an OAuth 2.0 bearer token and a client certificate.
       enum:
-      - WEBHOOK_AUTH_TYPE_HMAC
+      - WEBHOOK_AUTH_TYPE_SIGNATURE_ONLY
       - WEBHOOK_AUTH_TYPE_OAUTH
       - WEBHOOK_AUTH_TYPE_MTLS
       - WEBHOOK_AUTH_TYPE_OAUTH_MTLS
@@ -18129,6 +18211,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/coinbase.public_rest_api.beta.WebhookRecentFailure'
+        in_progress:
+          type: string
+          format: int64
       description: "GetWebhookSubscriptionStatsResponse returns subscription health,\
         \ delivery statistics, and recent failures."
     coinbase.public_rest_api.beta.GetWebhookOwnerStatsResponse:
@@ -18340,6 +18425,12 @@ components:
         avg_latency_ms:
           type: string
           format: int64
+        failed:
+          type: string
+          format: int64
+        in_progress:
+          type: string
+          format: int64
       description: WebhookEventTypeStats contains aggregated delivery statistics for
         one event type.
     coinbase.public_rest_api.beta.WebhookRecentFailure:
@@ -18420,6 +18511,9 @@ components:
       - WEBHOOK_ERROR_TYPE_HTTP_5XX
       - WEBHOOK_ERROR_TYPE_TIMEOUT
       - WEBHOOK_ERROR_TYPE_CONNECTION_ERROR
+      - WEBHOOK_ERROR_TYPE_HTTP_3XX
+      - WEBHOOK_ERROR_TYPE_INVALID_EVENT
+      - WEBHOOK_ERROR_TYPE_CANCELED
     coinbase.public_rest_api.beta.RewardsRateTierType:
       type: string
       description: RewardsRateTierType describes what a rewards rate tier is scoped
@@ -18705,6 +18799,7 @@ components:
       - ADVANCED_TRANSFER_COUNTERPARTY_INVALID
       - ADVANCED_TRANSFER_AMOUNT_INVALID
       - ADVANCED_TRANSFER_COUNTERPARTY_REQUIRED
+      - ADVANCED_TRANSFER_IDEMPOTENCY_KEY_INVALID
     coinbase.public_rest_api.CreateAdvancedTransferForbiddenErrorResponse:
       type: object
       properties:
@@ -23838,6 +23933,23 @@ components:
       type: string
       enum:
       - AUTH_AUTHORIZATION_FAILED
+    coinbase.public_rest_api.ListAdvancedTransferTransactionsBadRequestErrorResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/coinbase.public_rest_api.BadRequestErrorCode'
+        message:
+          type: string
+        subcode:
+          $ref: '#/components/schemas/coinbase.public_rest_api.ListAdvancedTransferTransactionsBadRequestSubcode'
+        trace_id:
+          type: string
+      description: ListAdvancedTransferTransactionsBadRequestErrorResponse documents
+        the HTTP 400 error body.
+    coinbase.public_rest_api.ListAdvancedTransferTransactionsBadRequestSubcode:
+      type: string
+      enum:
+      - ADVANCED_TRANSFER_REQUEST_INVALID
     coinbase.public_rest_api.ListAdvancedTransferTransactionsForbiddenErrorResponse:
       type: object
       properties:
@@ -26675,6 +26787,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/coinbase.public_rest_api.CancelAdvancedTransferNotFoundErrorResponse'
+    ListAdvancedTransferTransactionsBadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/coinbase.public_rest_api.ListAdvancedTransferTransactionsBadRequestErrorResponse'
     ListAdvancedTransferTransactionsForbidden:
       description: Permission denied. The API key lacks the required scope for this
         resource.

@@ -45,6 +45,7 @@ type GetWebhookDeliveryAttemptsResponse struct {
 }
 
 // GetWebhookDeliveryAttempts lists the delivery attempts of a single webhook event.
+// The API retains delivery history for up to 30 days from each attempt’s timestamp.
 func (s *webhooksServiceImpl) GetWebhookDeliveryAttempts(
 	ctx context.Context,
 	request *GetWebhookDeliveryAttemptsRequest,

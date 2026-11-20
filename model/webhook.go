@@ -16,11 +16,15 @@
 
 package model
 
-// WebhookAuthType is the authentication scheme used when delivering webhooks.
+// WebhookAuthType is the authentication scheme used in addition to the HMAC-SHA256
+// and Ed25519 signatures on every webhook delivery.
 type WebhookAuthType string
 
 const (
-	WebhookAuthTypeHmac      WebhookAuthType = "WEBHOOK_AUTH_TYPE_HMAC"
+	// WebhookAuthTypeSignatureOnly adds no authentication beyond delivery signatures.
+	// This is the default when a subscription is created without an auth type.
+	WebhookAuthTypeSignatureOnly WebhookAuthType = "WEBHOOK_AUTH_TYPE_SIGNATURE_ONLY"
+
 	WebhookAuthTypeOauth     WebhookAuthType = "WEBHOOK_AUTH_TYPE_OAUTH"
 	WebhookAuthTypeMtls      WebhookAuthType = "WEBHOOK_AUTH_TYPE_MTLS"
 	WebhookAuthTypeOauthMtls WebhookAuthType = "WEBHOOK_AUTH_TYPE_OAUTH_MTLS"
@@ -55,6 +59,9 @@ const (
 	WebhookErrorTypeHttp5xx         WebhookErrorType = "WEBHOOK_ERROR_TYPE_HTTP_5XX"
 	WebhookErrorTypeTimeout         WebhookErrorType = "WEBHOOK_ERROR_TYPE_TIMEOUT"
 	WebhookErrorTypeConnectionError WebhookErrorType = "WEBHOOK_ERROR_TYPE_CONNECTION_ERROR"
+	WebhookErrorTypeHttp3xx         WebhookErrorType = "WEBHOOK_ERROR_TYPE_HTTP_3XX"
+	WebhookErrorTypeInvalidEvent    WebhookErrorType = "WEBHOOK_ERROR_TYPE_INVALID_EVENT"
+	WebhookErrorTypeCanceled        WebhookErrorType = "WEBHOOK_ERROR_TYPE_CANCELED"
 )
 
 // WebhookStatsPeriod is the time window for webhook statistics.
@@ -156,6 +163,8 @@ type WebhookEventTypeStats struct {
 	Successful   string  `json:"successful,omitempty"`
 	SuccessRate  float64 `json:"success_rate,omitempty"`
 	AvgLatencyMs string  `json:"avg_latency_ms,omitempty"`
+	Failed       string  `json:"failed,omitempty"`
+	InProgress   string  `json:"in_progress,omitempty"`
 }
 
 // WebhookRecentFailure is a recent failed webhook delivery.

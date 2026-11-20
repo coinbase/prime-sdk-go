@@ -22,8 +22,8 @@ func TestMetadataCompleteness(t *testing.T) {
 	if len(errorCodeInfo) != 10 {
 		t.Fatalf("errorCodeInfo size %d, want 10", len(errorCodeInfo))
 	}
-	if len(subcodeInfo) != 298 {
-		t.Fatalf("subcodeInfo size %d, want 298", len(subcodeInfo))
+	if len(subcodeInfo) != 299 {
+		t.Fatalf("subcodeInfo size %d, want 299", len(subcodeInfo))
 	}
 
 	codes := []ErrorCode{
@@ -54,5 +54,10 @@ func TestMetadataCompleteness(t *testing.T) {
 	}
 	if info.ErrorCode != ErrorCodeResourceNotFound || info.HTTPStatus != 404 {
 		t.Fatalf("ORDER_NOT_FOUND metadata %+v", info)
+	}
+
+	info, ok = LookupSubcode(SubcodeAdvancedTransferIdempotencyKeyInvalid)
+	if !ok || info.ErrorCode != ErrorCodeValidationError || info.HTTPStatus != 400 {
+		t.Fatalf("ADVANCED_TRANSFER_IDEMPOTENCY_KEY_INVALID metadata %+v, found %v", info, ok)
 	}
 }

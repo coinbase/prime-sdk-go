@@ -100,3 +100,9 @@ const SubcodeAdvancedTransferAmountInvalid Subcode = "ADVANCED_TRANSFER_AMOUNT_I
 // One or more fund movements is missing its counterparty identifier.
 // HTTP status: 400. Error code: REQUIRED_FIELD_MISSING.
 const SubcodeAdvancedTransferCounterpartyRequired Subcode = "ADVANCED_TRANSFER_COUNTERPARTY_REQUIRED"
+
+// SubcodeAdvancedTransferIdempotencyKeyInvalid is the subcode ADVANCED_TRANSFER_IDEMPOTENCY_KEY_INVALID.
+//
+// The idempotency_key field is present but is not a valid UUID.
+// HTTP status: 400. Error code: VALIDATION_ERROR.
+const SubcodeAdvancedTransferIdempotencyKeyInvalid Subcode = "ADVANCED_TRANSFER_IDEMPOTENCY_KEY_INVALID"

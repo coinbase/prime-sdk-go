@@ -27,6 +27,8 @@ const (
 	AdvancedTransferStateFailed     AdvancedTransferState = "ADVANCED_TRANSFER_STATE_FAILED"
 	AdvancedTransferStateExpired    AdvancedTransferState = "ADVANCED_TRANSFER_STATE_EXPIRED"
 	AdvancedTransferStateRejected   AdvancedTransferState = "ADVANCED_TRANSFER_STATE_REJECTED"
+	// AdvancedTransferStateMatched means the counterparties matched but settlement has not started.
+	AdvancedTransferStateMatched AdvancedTransferState = "ADVANCED_TRANSFER_STATE_MATCHED"
 )
 
 // AdvancedTransferType specifies the type of advanced transfer.

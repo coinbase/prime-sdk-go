@@ -1054,6 +1054,22 @@ type PrimeXMOffsetCreditBreakdown struct {
 	TotalCredit      string `json:"total_credit,omitempty"`
 }
 
+// XMPositionType identifies a balance leg within a per-asset cross-margin position.
+type XMPositionType string
+
+const (
+	XMPositionTypeSpotTrading XMPositionType = "XM_POSITION_TYPE_SPOT_TRADING"
+	XMPositionTypeSpotVault   XMPositionType = "XM_POSITION_TYPE_SPOT_VAULT"
+)
+
+// CrossMarginPositionBreakdown is a single balance leg in a per-asset cross-margin position.
+type CrossMarginPositionBreakdown struct {
+	PositionType XMPositionType `json:"position_type,omitempty"`
+	// Balance and NotionalBalance are signed amounts after pending withdrawals, before caps and haircuts.
+	Balance         string `json:"balance,omitempty"`
+	NotionalBalance string `json:"notional_balance,omitempty"` // USD
+}
+
 // CrossMarginPrimeXMPosition is a single per-asset XM row in the Prime Beta
 // cross-margin model.
 type CrossMarginPrimeXMPosition struct {
@@ -1075,6 +1091,7 @@ type CrossMarginPrimeXMPosition struct {
 
 	AssetClass             PrimeXMAssetClass                       `json:"asset_class,omitempty"`
 	SpotMarginContribution *CrossMarginPrimeSpotMarginContribution `json:"spot_margin_contribution,omitempty"`
+	SpotPositionBreakdown  []*CrossMarginPositionBreakdown         `json:"spot_position_breakdown,omitempty"`
 }
 
 // PrimeXMMarginCallThresholds holds the threshold values that define each

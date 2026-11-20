@@ -134,7 +134,7 @@ func TestCreateWebhookSubscription(t *testing.T) {
 		PortfolioId: "p1",
 		EventTypes:  []string{"ORDER_UPDATED"},
 		TargetUrl:   "https://example.com/hook",
-		AuthType:    model.WebhookAuthTypeHmac,
+		AuthType:    model.WebhookAuthTypeSignatureOnly,
 	}
 	resp, err := svc.CreateWebhookSubscription(context.Background(), req)
 	if err != nil {
@@ -149,7 +149,7 @@ func TestCreateWebhookSubscription(t *testing.T) {
 	if err := json.Unmarshal([]byte(got.body), &body); err != nil {
 		t.Fatal(err)
 	}
-	if body["target_url"] != "https://example.com/hook" || body["auth_type"] != "WEBHOOK_AUTH_TYPE_HMAC" || body["idempotency_key"] == "" {
+	if body["target_url"] != "https://example.com/hook" || body["auth_type"] != "WEBHOOK_AUTH_TYPE_SIGNATURE_ONLY" || body["idempotency_key"] == "" {
 		t.Errorf("unexpected body: %s", got.body)
 	}
 	if _, ok := body["portfolio_id"]; ok {
@@ -299,7 +299,7 @@ func TestGetWebhookDeliveryAttempts(t *testing.T) {
 }
 
 func TestGetWebhookSubscriptionStats(t *testing.T) {
-	svc, got := newTestService(t, `{"subscription_id":"s1","total_events":"10","success_rate":0.9}`)
+	svc, got := newTestService(t, `{"subscription_id":"s1","total_events":"10","in_progress":"2","success_rate":0.9,"event_type_breakdown":[{"event_type":"ORDER_UPDATED","failed":"1","in_progress":"2"}]}`)
 
 	resp, err := svc.GetWebhookSubscriptionStats(context.Background(), &GetWebhookSubscriptionStatsRequest{
 		PortfolioId:    "p1",
@@ -310,8 +310,11 @@ func TestGetWebhookSubscriptionStats(t *testing.T) {
 		t.Fatal(err)
 	}
 	assertRequest(t, got, http.MethodGet, "/portfolios/p1/webhooks/subscriptions/s1/stats", "period=WEBHOOK_STATS_PERIOD_24H")
-	if resp.TotalEvents != "10" || resp.SuccessRate != 0.9 {
+	if resp.TotalEvents != "10" || resp.InProgress != "2" || resp.SuccessRate != 0.9 {
 		t.Errorf("unexpected response: %+v", resp)
+	}
+	if len(resp.EventTypeBreakdown) != 1 || resp.EventTypeBreakdown[0].Failed != "1" || resp.EventTypeBreakdown[0].InProgress != "2" {
+		t.Errorf("unexpected event type breakdown: %+v", resp.EventTypeBreakdown)
 	}
 }
 

@@ -56,7 +56,7 @@ func main() {
 		PortfolioId: credentials.PortfolioId,
 		EventTypes:  strings.Split(eventTypes, ","),
 		TargetUrl:   targetUrl,
-		AuthType:    model.WebhookAuthTypeHmac,
+		AuthType:    model.WebhookAuthTypeSignatureOnly,
 	}
 
 	response, err := svc.CreateWebhookSubscription(context.Background(), request)

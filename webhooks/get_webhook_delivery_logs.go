@@ -58,6 +58,7 @@ func (r *GetWebhookDeliveryLogsResponse) Next(ctx context.Context) (*GetWebhookD
 }
 
 // GetWebhookDeliveryLogs lists the delivery log of a webhook subscription.
+// The API retains delivery history for up to 30 days from each attempt’s timestamp.
 func (s *webhooksServiceImpl) GetWebhookDeliveryLogs(
 	ctx context.Context,
 	request *GetWebhookDeliveryLogsRequest,
